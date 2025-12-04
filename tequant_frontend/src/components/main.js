@@ -5,6 +5,7 @@ import Navbar from './navbar';
 import HomePage from './home';
 import BlogPage from './blog/blogLanding';
 import CoursesPage from './courses';
+import DataAnalyticsLandingPage from './marketing/dataAnalytics';
 
 function Main() {
   return (
@@ -15,6 +16,7 @@ function Main() {
       <Route path ="/" element= {<HomePage/>}/>
       <Route path ="/blog" element ={<BlogPage/>}/>
       <Route path ="/courses" element = {<CoursesPage/>}/>
+      <Route path ="/marketing-data-analytics" element={<DataAnalyticsLandingPage/>}/>
 
       </Routes>
 

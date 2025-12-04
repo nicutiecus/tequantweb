@@ -1,5 +1,31 @@
 import { useState, useMemo } from "react";
-import { Zap } from "lucide-react";
+import { Zap, Star } from "lucide-react";
+
+ const CourseCard = ({ course }) => (
+  <div className="col-md-6 col-lg-4 mb-4">
+    <div className="card h-100 border-0 shadow-sm hover-lift transition-all">
+      <div className="position-relative">
+        <img src={course.image} className="card-img-top" alt={course.title} style={{height: "200px", objectFit: "cover"}} />
+        <span className="position-absolute top-0 end-0 m-3 badge bg-white text-primary shadow-sm">
+          {course.category}
+        </span>
+      </div>
+      <div className="card-body">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <div className="d-flex align-items-center text-warning">
+            <Star size={16} fill="currentColor" />
+            <span className="ms-1 fw-bold text-dark">{course.rating}</span>
+            <span className="text-muted small ms-1">({course.students})</span>
+          </div>
+          <span className="fw-bold text-primary">{course.price}</span>
+        </div>
+        <h5 className="card-title fw-bold mb-2">{course.title}</h5>
+        <p className="card-text text-muted small mb-3">{course.description}</p>
+        <button className="btn btn-outline-primary w-100">View Syllabus</button>
+      </div>
+    </div>
+  </div>
+);
 
 const COURSES = [
   {

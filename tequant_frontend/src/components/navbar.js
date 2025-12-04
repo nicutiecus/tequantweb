@@ -2,7 +2,7 @@ import { Terminal, X, Menu } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Navbar  ({ activePage, onNavigate })  {
+export default function Navbar  ({ activePage, onNavigate})  {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -44,15 +44,15 @@ export default function Navbar  ({ activePage, onNavigate })  {
                 About Us
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">Courses</a>
+             <li className="nav-item">
+              <Link className="nav-link" onClick={onNavigate} activePage={activePage} to="/courses">Courses</Link>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="#">Bootcamps</a>
 
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/blog">Blog</Link>
+              <Link className="nav-link" onClick={onNavigate} activePage={activePage} to="/blog">Blog</Link>
             </li>
             
             <li className="nav-item ms-lg-3">

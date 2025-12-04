@@ -4,6 +4,7 @@ import Footer from './footer';
 import Navbar from './navbar';
 import HomePage from './home';
 import BlogPage from './blog/blogLanding';
+import CoursesPage from './courses';
 
 function Main() {
   return (
@@ -13,6 +14,7 @@ function Main() {
 
       <Route path ="/" element= {<HomePage/>}/>
       <Route path ="/blog" element ={<BlogPage/>}/>
+      <Route path ="/courses" element = {<CoursesPage/>}/>
 
       </Routes>
 

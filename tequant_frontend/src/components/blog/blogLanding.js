@@ -147,7 +147,7 @@ export default function BlogPage ()  {
       </div>
 
       {/* Newsletter CTA */}
-      <section className="bg-primary text-white py-5">
+      <section className="bg-success text-white py-5">
         <div className="container text-center">
           <div className="row justify-content-center">
             <div className="col-md-8">

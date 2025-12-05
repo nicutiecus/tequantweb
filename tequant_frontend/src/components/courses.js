@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Zap, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
  const CourseCard = ({ course }) => (
   <div className="col-md-6 col-lg-4 mb-4">
@@ -96,7 +97,7 @@ const COURSES = [
   }
 ];
 
-export default function CoursesPage ()  {
+export default function CoursesPage ({onNavigate})  {
   const [selectedCategory, setSelectedCategory] = useState('All');
   
   // Extract Categories
@@ -150,7 +151,14 @@ export default function CoursesPage ()  {
                       <p className="text-muted small mb-3">{course.description}</p>
                       <div className="d-flex justify-content-between align-items-center">
                         <span className="fw-bold">{course.price}</span>
-                        <a href="#" className="btn btn-sm btn-outline-dark">Details</a>
+                        <Link 
+                           to={{ page: '/courseDetail/<id>', id: course.id }} 
+                           className="btn btn-sm btn-outline-dark"
+                           onClick={onNavigate}
+                         >
+                           Details
+                         </Link>
+                    
                       </div>
                     </div>
                   </div>

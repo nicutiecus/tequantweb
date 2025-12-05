@@ -27,22 +27,20 @@ export default function Navbar  ({ activePage, onNavigate})  {
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
             <li className="nav-item">
-              <a 
+              <Link
                 className={`nav-link ${activePage === 'home' ? 'active fw-bold text-primary' : ''}`} 
-                href="#" 
+                to="/" 
                 onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
               >
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a 
-                className={`nav-link ${activePage === 'about' ? 'active fw-bold text-primary' : ''}`} 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onNavigate('about'); }}
-              >
-                About Us
-              </a>
+              
+                <Link className="nav-link" onClick={onNavigate} activePage={activePage} to="/about">About Us</Link>
+              
+                
+            
             </li>
              <li className="nav-item">
               <Link className="nav-link" onClick={onNavigate} activePage={activePage} to="/courses">Courses</Link>

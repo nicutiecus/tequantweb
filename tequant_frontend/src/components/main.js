@@ -6,6 +6,7 @@ import HomePage from './home';
 import BlogPage from './blog/blogLanding';
 import CoursesPage from './courses';
 import DataAnalyticsLandingPage from './marketing/dataAnalytics';
+import AboutPage from './aboutPage';
 
 function Main() {
   return (
@@ -17,6 +18,7 @@ function Main() {
       <Route path ="/blog" element ={<BlogPage/>}/>
       <Route path ="/courses" element = {<CoursesPage/>}/>
       <Route path ="/marketing-data-analytics" element={<DataAnalyticsLandingPage/>}/>
+      <Route path ="/about" element= {<AboutPage/>}/>
 
       </Routes>
 

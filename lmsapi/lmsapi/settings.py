@@ -87,13 +87,24 @@ DATABASES = {
     #   'ENGINE': 'django.db.backends.sqlite3',
     #  'NAME': BASE_DIR / 'db.sqlite3',
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_lms',
-        'USER': 'Nikson',
-        'PASSWORD': 'NiksonMYSQL25#',
-        'HOST': '127.0.0.1',
-        'PORT': '3306'
-    }
+       'ENGINE': 'django.db.backends.mysql',
+     'NAME': 'django_lms',
+     'USER': 'Nikson',
+    'PASSWORD': 'NiksonMYSQL25#',
+     'HOST': '127.0.0.1',
+    'PORT': '3306'
+    },
+    #'default':{
+    #   'ENGINE': 'django.db.backends.postgresql',
+    #   'NAME': 'tequant_lms',
+    #   'USER': 'Nikson',
+    #  'PASSWORD': 'Nikson92',
+    #  'HOST': 'localhost',
+    # 'PORT': '5432'
+    #},
+
+
+    
 }
 
 

@@ -5,6 +5,9 @@ class Teacher(models.Model):
     full_name= models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
+    role = models.CharField(default="null", max_length=200)
+    bio = models.TextField(default="no bio yet")
+    image = models.CharField(default="no pic yet", max_length=225)
 
     def __str__(self):
         return self.full_name

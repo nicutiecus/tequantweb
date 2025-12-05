@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-61z8q)&lq68e7mkwpnh1*^badhd(e1z2&r9yux^8#f*l#g#)&d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -82,30 +82,20 @@ WSGI_APPLICATION = 'lmsapi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
+DATABASES = 
     #'default': {
     #   'ENGINE': 'django.db.backends.sqlite3',
     #  'NAME': BASE_DIR / 'db.sqlite3',
-    'default': {
-       'ENGINE': 'django.db.backends.mysql',
-     'NAME': 'django_lms',
-     'USER': 'Nikson',
-    'PASSWORD': 'NiksonMYSQL25#',
-     'HOST': '127.0.0.1',
-    'PORT': '3306'
-    },
-    #'default':{
-    #   'ENGINE': 'django.db.backends.postgresql',
-    #   'NAME': 'tequant_lms',
-    #   'USER': 'Nikson',
-    #  'PASSWORD': 'Nikson92',
-    #  'HOST': 'localhost',
-    # 'PORT': '5432'
-    #},
+   {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL'), # Falls back to the value set in Dokploy
+        conn_max_age=600 
+    )
+}
 
 
     
-}
+
 
 
 # Password validation

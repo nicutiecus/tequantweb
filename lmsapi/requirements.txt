@@ -1,6 +1,7 @@
 asgiref==3.9.1
 certifi==2025.1.31
 distlib==0.3.9
+dj-database-url==3.0.1
 Django==5.2.6
 django-cors-headers==4.8.0
 djangorestframework==3.16.1
@@ -14,6 +15,7 @@ platformdirs==4.3.7
 psycopg==3.3.1
 psycopg2-binary==2.9.11
 PyJWT==2.10.1
+python-decouple==3.8
 pytube==15.0.0
 setuptools==78.1.0
 sqlparse==0.5.3

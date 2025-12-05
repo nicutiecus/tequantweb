@@ -1,0 +1,25 @@
+Python
+
+pycache
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+Git
+
+.git
+.gitignore
+
+Frontend (If your React app is inside a folder in this repo)
+
+tequant_frontend/node_modules
+tequant_frontend/dist
+tequant_frontend/build
+node_modules/
+
+Docker
+
+Dockerfile
+docker-compose.yml

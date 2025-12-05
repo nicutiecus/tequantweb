@@ -38,4 +38,4 @@ EXPOSE 8000
 
 # Command to run the application using Gunicorn
 # Replace 'tequant_project.wsgi' with your actual project folder name containing wsgi.py
-CMD ["gunicorn", "tequant_project.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+CMD ["gunicorn", "lmsapi.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

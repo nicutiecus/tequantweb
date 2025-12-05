@@ -84,17 +84,29 @@ WSGI_APPLICATION = 'lmsapi.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+database_url = config('DATABASE_URL', default=None)
 
-DATABASES = 
-    #'default': {
-    #   'ENGINE': 'django.db.backends.sqlite3',
-    #  'NAME': BASE_DIR / 'db.sqlite3',
-   {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL'), # Falls back to the value set in Dokploy
-        conn_max_age=600 
-    )
-}
+if database_url:
+    # --- PRODUCTION / RUNTIME CONFIGURATION ---
+    # DATABASE_URL is present. We use the MySQL connection details 
+    # provided by Dokploy using the dj-database-url parser.
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=database_url,
+            conn_max_age=600  
+        )
+    }
+else:
+    # --- BUILD-TIME CONFIGURATION ---
+    # DATABASE_URL is missing. We use a temporary SQLite configuration
+    # to allow the 'collectstatic' command to run without needing an 
+    # external database connection, preventing the exit code: 1 error.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'temp_db.sqlite3', 
+        }
+    }
 
 
     

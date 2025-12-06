@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Set the working directory in the container
-WORKDIR /lmsapi
+WORKDIR /app
 
 # Install system dependencies required for MySQL and Python build tools
 # - gcc, pkg-config: Required to compile certain Python packages
@@ -22,12 +22,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements.txt /lmsapi/
+COPY requirements.txt /app/
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
-COPY . /lmsapi/
+COPY . /app/
 
 # Collect static files (bundles CSS/JS for production serving)
 # Ensure your settings.py has STATIC_ROOT configured

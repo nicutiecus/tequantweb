@@ -30,7 +30,7 @@ export default function Navbar  ({ activePage, onNavigate})  {
               <Link
                 className={`nav-link ${activePage === 'home' ? 'active fw-bold text-primary' : ''}`} 
                 to="/" 
-                onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
+              
               >
                 Home
               </Link>

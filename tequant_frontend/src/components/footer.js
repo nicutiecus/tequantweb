@@ -1,4 +1,5 @@
 import { Linkedin, Facebook, Twitter, Terminal, MapPin, Phone, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer  ({ onNavigate }) {
     return(
@@ -15,29 +16,29 @@ export default function Footer  ({ onNavigate }) {
             Based in Port Harcourt, serving the world.
           </p>
           <div className="d-flex gap-3 mt-3">
-            <a href="#" className="text-white-50 hover-white"><Facebook size={20} /></a>
-            <a href="#" className="text-white-50 hover-white"><Twitter size={20} /></a>
-            <a href="#" className="text-white-50 hover-white"><Linkedin size={20} /></a>
+            <Link to="#" className="text-white-50 hover-white"><Facebook size={20} /></Link>
+             <Link to="#" className="text-white-50 hover-white"><Twitter size={20} /></Link>
+             <Link to="#" className="text-white-50 hover-white"><Linkedin size={20} /></Link>
           </div>
         </div>
         <div className="col-sm-6 col-lg-2">
           <h6 className="fw-bold mb-3">Company</h6>
           <ul className="list-unstyled text-white-50 small">
             <li className="mb-2">
-              <a href="#" className="text-decoration-none text-reset" onClick={(e) => { e.preventDefault(); onNavigate('about'); }}>About Us</a>
+              <Link href="#" className="text-decoration-none text-reset" onClick={(e) => { e.preventDefault(); onNavigate('about'); }}>About Us</Link>
             </li>
-            <li className="mb-2"><a href="#" className="text-decoration-none text-reset">Careers</a></li>
-            <li className="mb-2"><a href="#" className="text-decoration-none text-reset">Partners</a></li>
-            <li className="mb-2"><a href="#" className="text-decoration-none text-reset">Privacy Policy</a></li>
+            <li className="mb-2"><Link to="#" className="text-decoration-none text-reset">Careers</Link></li>
+            <li className="mb-2"><Link to="#" className="text-decoration-none text-reset">Partners</Link></li>
+            <li className="mb-2"><Link to="#" className="text-decoration-none text-reset">Privacy Policy</Link></li>
           </ul>
         </div>
         <div className="col-sm-6 col-lg-2">
           <h6 className="fw-bold mb-3">Resources</h6>
           <ul className="list-unstyled text-white-50 small">
-            <li className="mb-2"><a href="#" className="text-decoration-none text-reset">Blog</a></li>
-            <li className="mb-2"><a href="#" className="text-decoration-none text-reset">Student Portal</a></li>
-            <li className="mb-2"><a href="#" className="text-decoration-none text-reset">Teacher Login</a></li>
-            <li className="mb-2"><a href="#" className="text-decoration-none text-reset">FAQs</a></li>
+            <li className="mb-2"><Link href="#" className="text-decoration-none text-reset">Blog</Link></li>
+            <li className="mb-2"><Link href="#" className="text-decoration-none text-reset">Student Portal</Link></li>
+            <li className="mb-2"><Link href="#" className="text-decoration-none text-reset">Teacher Login</Link></li>
+            <li className="mb-2"><Link href="#" className="text-decoration-none text-reset">FAQs</Link></li>
           </ul>
         </div>
         <div className="col-lg-4">

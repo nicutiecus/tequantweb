@@ -2,6 +2,7 @@ import BlogSidebar from "./blogSidebar";
 import { useState, useMemo } from "react";
 import BlogCardHorizontal from "./blogCardHorizontal";
 import { Search, Mail} from "lucide-react";
+import { Link } from "react-router-dom";
 
 console.log("Sidebar:", BlogSidebar); // If this logs an Object { ... }, your import is wrong.
 console.log("Card:", BlogCardHorizontal); // It should log a Function.
@@ -134,11 +135,11 @@ export default function BlogPage ()  {
             {filteredPosts.length > 0 && (
               <nav aria-label="Page navigation" className="mt-5">
                 <ul className="pagination justify-content-center">
-                  <li className="page-item disabled"><a className="page-link" href="#">Previous</a></li>
-                  <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                  <li className="page-item"><a className="page-link" href="#">2</a></li>
-                  <li className="page-item"><a className="page-link" href="#">3</a></li>
-                  <li className="page-item"><a className="page-link" href="#">Next</a></li>
+                  <li className="page-item disabled"><Link className="page-link" to="#">Previous</Link></li>
+                  <li className="page-item active"><Link className="page-link" to="#">1</Link></li>
+                  <li className="page-item"><Link className="page-link" to="#">2</Link></li>
+                   <li className="page-item"><Link className="page-link" to="#">3</Link></li>
+                   <li className="page-item"><Link className="page-link" to="#">Next</Link></li>
                 </ul>
               </nav>
             )}

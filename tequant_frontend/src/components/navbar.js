@@ -8,14 +8,14 @@ export default function Navbar  ({ activePage, onNavigate})  {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-success shadow-sm fixed-top">
       <div className="container">
-        <a 
+        <Link 
           className="navbar-brand fw-bold text-primary d-flex align-items-center" 
-          href="#"
+          to="#"
           onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
         >
           <Terminal className="me-2" size={28} />
           TE Quant
-        </a>
+        </Link>
         <button 
           className="navbar-toggler border-0" 
           type="button" 
@@ -46,7 +46,7 @@ export default function Navbar  ({ activePage, onNavigate})  {
               <Link className="nav-link" onClick={onNavigate} activePage={activePage} to="/courses">Courses</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">Bootcamps</a>
+              <Link className="nav-link" to="#">Bootcamps</Link>
 
             </li>
             <li className="nav-item">
@@ -54,11 +54,11 @@ export default function Navbar  ({ activePage, onNavigate})  {
             </li>
             
             <li className="nav-item ms-lg-3">
-              <a className="btn btn-outline-primary me-2" href="#">Login</a>
+              <Link className="btn btn-outline-primary me-2" to="#">Login</Link>
             </li>
             
             <li className="nav-item mt-2 mt-lg-0">
-              <a className="btn btn-primary" href="#">Get Started</a>
+              <Link className="btn btn-primary" to="#">Get Started</Link>
             </li>
             
           </ul>

@@ -1,4 +1,5 @@
 import { CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Hero (){
 
@@ -20,12 +21,12 @@ export default function Hero (){
               hands-on training and mentorship.
             </p>
             <div className="d-flex flex-wrap gap-3">
-              <a href="#" className="btn btn-primary btn-lg px-4">
+              <Link to="#" className="btn btn-primary btn-lg px-4">
                 Browse Courses
-              </a>
-              <a href="#" className="btn btn-outline-dark btn-lg px-4">
+              </Link>
+              <Link to="#" className="btn btn-outline-dark btn-lg px-4">
                 Join August Bootcamp
-              </a>
+              </Link>
             </div>
             <div className="mt-4 pt-3 border-top d-flex gap-4">
               <div>

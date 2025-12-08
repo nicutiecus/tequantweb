@@ -1,29 +1,31 @@
 import { Star } from "lucide-react";
 
-
 export default function Testimonials () {
-    const SAMPLE_TESTIMONIALS = [
-  {
-    id: 1,
-    name: "Chioma Okorie",
-    role: "Data Analyst at OilServ",
-    text: "TE Quant changed my career path. The instructors in Port Harcourt were very hands-on. I went from knowing nothing about Excel to building predictive models in Python.",
-    image: "https://drive.google.com/file/d/1C2AijVG9tbRqV_5EgN0xiBvPZn8tJBng/view?usp=drive_link"
-  },
-  {
-    id: 2,
-    name: "Ruth Oriyomi",
-    role: "Freelance Developer",
-    text: "The coding bootcamp during the August break was intense but worth it. I built my first full website in just 4 weeks. Highly recommend for any student in Rivers State.",
-    image: "https://drive.google.com/file/d/15xjEgOGsvQhVbIVtsUgtyUnQ50BIzJ9w/view?usp=drive_link"
-  },
-  {
-    id: 3,
-    name: "Kelvin Showoolu",
-    role: "Computer Science Student, RSU",
-    text: "Accessing the LMS notes and videos made revision so easy. The assignments really tested my knowledge. Best tech school in PH!",
-    image: "https://drive.google.com/file/d/1E17JF1eoPbNUlqxiBseHG0qy5RCT9F35/view?usp=drive_link"
-  }
+    const SAMPLE_TESTIMONIALS = [
+  {
+    id: 1,
+    name: "Chioma Okorie",
+    role: "Data Analyst at OilServ",
+    text: "TE Quant changed my career path. The instructors in Port Harcourt were very hands-on. I went from knowing nothing about Excel to building predictive models in Python.",
+    
+    image: "https://drive.google.com/uc?export=view&id=1C2AijVG9tbRqV_5EgN0xiBvPZn8tJBng" 
+  },
+  {
+    id: 2,
+    name: "Ruth Oriyomi",
+    role: "Freelance Developer",
+    text: "The coding bootcamp during the August break was intense but worth it. I built my first full website in just 4 weeks. Highly recommend for any student in Rivers State.",
+    
+    image: "https://drive.google.com/uc?export=view&id=15xjEgOGsvQhVbIVtsUgtyUnQ50BIzJ9w"
+  },
+  {
+    id: 3,
+    name: "Kelvin Showoolu",
+    role: "Computer Science Student, RSU",
+    text: "Accessing the LMS notes and videos made revision so easy. The assignments really tested my knowledge. Best tech school in PH!",
+    
+    image: "https://drive.google.com/uc?export=view&id=1E17JF1eoPbNUlqxiBseHG0qy5RCT9F35"
+  }
 ];
 
 return(

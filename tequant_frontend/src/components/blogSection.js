@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { Link } from "react-router-dom";
 
 export default function BlogSection (){
 
@@ -40,9 +40,9 @@ return(
                   <span>{post.date}</span>
                 </div>
                 <h5 className="card-title fw-bold">
-                  <a href="#" className="text-decoration-none text-dark">{post.title}</a>
+                  <Link to="#" className="text-decoration-none text-dark">{post.title}</Link>
                 </h5>
-                <a href="#" className="small text-primary fw-bold text-decoration-none">Read More →</a>
+                <Link to="#" className="small text-primary fw-bold text-decoration-none">Read More →</Link>
               </div>
             </div>
           </div>

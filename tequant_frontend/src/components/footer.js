@@ -44,9 +44,9 @@ export default function Footer  ({ onNavigate }) {
         <div className="col-lg-4">
           <h6 className="fw-bold mb-3">Contact Us</h6>
           <ul className="list-unstyled text-white-50 small">
-            <li className="mb-2 d-flex"><MapPin size={18} className="me-2 text-primary" /> 12 Aba Road, Garrison, Port Harcourt, Nigeria</li>
-            <li className="mb-2 d-flex"><Phone size={18} className="me-2 text-primary" /> +234 800 123 4567</li>
-            <li className="mb-2 d-flex"><Mail size={18} className="me-2 text-primary" /> hello@tequant.com</li>
+            <li className="mb-2 d-flex"><MapPin size={18} className="me-2 text-primary" /> No. 3, Eliada Close, off Okporo Road, Rumuogba, Port Harcourt, Nigeria</li>
+            <li className="mb-2 d-flex"><Phone size={18} className="me-2 text-primary" /> +2348114787211, +2347068177787 </li>
+            <li className="mb-2 d-flex"><Mail size={18} className="me-2 text-primary" /> support@tequant.ng</li>
           </ul>
         </div>
       </div>

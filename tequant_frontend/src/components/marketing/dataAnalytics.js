@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   // Define the dark brown theme color for easy reuse in inline styles
   const themeColor = '#664d3e';
-
+S
   return (
     <div className="font-sans">
       {/* NAVIGATION */}
       <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div className="container">
           {/* Changed text-primary to custom inline color */}
-          <a className="navbar-brand fw-bold" style={{ color: themeColor }} href="#">DataPro NG</a>
+          <Link className="navbar-brand fw-bold" style={{ color: themeColor }} to="#">DataPro NG</Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span className="navbar-toggler-icon"></span>
           </button>

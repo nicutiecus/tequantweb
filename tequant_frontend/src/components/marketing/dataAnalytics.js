@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const LandingPage = () => {
   // Define the dark brown theme color for easy reuse in inline styles
   const themeColor = '#664d3e';
-S
+
   return (
     <div className="font-sans">
       {/* NAVIGATION */}

@@ -40,9 +40,26 @@ class Student(models.Model):
 class Module(models.Model):
     title = models.CharField(max_length=225)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(default="0")
 
 class Topic(models.Model):
     title = models.CharField(max_length=225)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     note = models.TextField()
-    video = models.CharField(max_length=225)
+    video = models.URLField()
+
+# --- Assessment Models ---
+class Exam(models.Model):
+    course = models.ForeignKey(Course, related_name='exams', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    duration_minutes = models.IntegerField()
+    
+class Question(models.Model):
+    exam = models.ForeignKey(Exam, related_name='questions', on_delete=models.CASCADE)
+    text = models.TextField()
+    # Simplified options structure; could be a separate model
+    option_a = models.CharField(max_length=200)
+    option_b = models.CharField(max_length=200)
+    option_c = models.CharField(max_length=200)
+    option_d = models.CharField(max_length=200)
+    correct_option = models.CharField(max_length=1, choices=[('A','A'), ('B','B'), ('C','C'), ('D','D')])

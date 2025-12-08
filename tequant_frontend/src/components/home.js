@@ -1,6 +1,7 @@
 import BlogSection from "./blogSection";
 import Features from "./features";
 import Hero from "./hero";
+import Partners from "./partners";
 import Testimonials from "./testimonials";
 
 export default function HomePage() {
@@ -9,6 +10,7 @@ export default function HomePage() {
 
 <Hero/>
 <Testimonials/>
+<Partners/>
 <Features/>
 <BlogSection/>
 

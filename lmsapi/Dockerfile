@@ -27,7 +27,7 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
-COPY ..
+COPY . /app/
 
 # Collect static files (bundles CSS/JS for production serving)
 # Ensure your settings.py has STATIC_ROOT configured

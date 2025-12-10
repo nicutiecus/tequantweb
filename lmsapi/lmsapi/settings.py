@@ -89,14 +89,14 @@ WSGI_APPLICATION = 'lmsapi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'webdb',
-        'USER': 'mysql',
-        'PASSWORD': 'dmp8agvt3eynesxn',
-        'HOST': 'tequantmysql-5w3akx', # Use 'localhost' as fallback
-        'PORT': 3306
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' as fallback
+        'PORT': os.environ.get('DB_PORT', '5432'),
+       
     }
 }
-
 
 
 # Ensure the app fails loudly if critical variables are missing

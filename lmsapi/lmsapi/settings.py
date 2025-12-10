@@ -89,11 +89,11 @@ WSGI_APPLICATION = 'lmsapi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' as fallback
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'NAME': "defaultdb",
+        'USER': "avnadmin",
+        'PASSWORD': "AVNS_6ikSreNR0TzqAwvycLv",
+        'HOST': "mysql-a264072-niksonkejeh-7c1b.j.aivencloud.com", # Use 'localhost' as fallback
+        'PORT': "10566",
        
     }
 }

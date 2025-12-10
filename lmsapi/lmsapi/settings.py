@@ -103,6 +103,8 @@ if db_name:
             'OPTIONS': {
                 'ssl': {'mode': 'REQUIRED'}
         }
+            
+    }
     }
 else:
     # --- BUILD TIME (Docker Build) ---

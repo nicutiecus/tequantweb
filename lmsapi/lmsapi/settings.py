@@ -100,6 +100,8 @@ if db_name:
             'PASSWORD': os.environ.get('DB_PASSWORD'),
             'HOST': os.environ.get('DB_HOST'),
             'PORT': os.environ.get('DB_PORT', '3306'),
+            'OPTIONS': {
+                'ssl': {'mode': 'REQUIRED'}
         }
     }
 else:

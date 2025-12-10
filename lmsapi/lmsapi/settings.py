@@ -86,17 +86,33 @@ WSGI_APPLICATION = 'lmsapi.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'), # Use 'localhost' as fallback
-        'PORT': os.environ.get('DB_PORT', '5432'),
-       
+
+db_name = os.environ.get('DB_NAME')
+
+if db_name:
+    # --- RUNTIME (Live in Dokploy) ---
+    # We have a database name, so we assume all other variables are present.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', # FIX: Changed from postgresql to mysql
+            'NAME': db_name,
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT', '3306'),
+        }
     }
-}
+else:
+    # --- BUILD TIME (Docker Build) ---
+    # DB_NAME is missing. We use a temporary SQLite DB so 'collectstatic' 
+    # doesn't crash with the "Configuration variables missing" exception.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 
 # Ensure the app fails loudly if critical variables are missing

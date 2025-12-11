@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-dummy-key-for-build-12345')
+SECRET_KEY = os.environ.get('SECRET_KEY', default='django-insecure-dummy-key-for-build-12345')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
 
 
 # Application definition
@@ -86,29 +86,47 @@ WSGI_APPLICATION = 'lmsapi.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-database_url = config('DATABASE_URL', default=None)
 
-if database_url:
-    # --- PRODUCTION / RUNTIME CONFIGURATION ---
-    # DATABASE_URL is present. We use the MySQL connection details 
-    # provided by Dokploy using the dj-database-url parser.
+db_name = os.environ.get('DB_NAME')
+
+if db_name:
+    # --- RUNTIME (Live in Dokploy) ---
+    # We have a database name, so we assume all other variables are present.
     DATABASES = {
-        'default': dj_database_url.config(
-            default=database_url,
-            conn_max_age=600  
-        )
+        'default': {
+            'ENGINE': 'django.db.backends.mysql', # FIX: Changed from postgresql to mysql
+            'NAME': db_name,
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT', '3306'),
+            'OPTIONS': {
+                'ssl': {'mode': 'REQUIRED'}
+        }
+            
+    }
     }
 else:
-    # --- BUILD-TIME CONFIGURATION ---
-    # DATABASE_URL is missing. We use a temporary SQLite configuration
-    # to allow the 'collectstatic' command to run without needing an 
-    # external database connection, preventing the exit code: 1 error.
+    # --- BUILD TIME (Docker Build) ---
+    # DB_NAME is missing. We use a temporary SQLite DB so 'collectstatic' 
+    # doesn't crash with the "Configuration variables missing" exception.
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'temp_db.sqlite3', 
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+
+
+# Ensure the app fails loudly if critical variables are missing
+if not SECRET_KEY:
+    raise Exception("SECRET_KEY environment variable not set!")
+
+if not DATABASES['default']['NAME']:
+    raise Exception("Database configuration variables are missing!")
+
+
 
 
     

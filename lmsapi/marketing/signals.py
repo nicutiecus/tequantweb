@@ -11,7 +11,7 @@ def create_email_schedule(sender, instance, created, **kwargs):
         # Email 1: Immediate (Welcome)
         ScheduledEmail.objects.create(
             lead=instance,
-            subject="Welcome to DataPro NG - Here is your Syllabus",
+            subject="Welcome to TE Quant Resources- Here is your Syllabus",
             body="Hi, thanks for joining...", # You would normally load this from a template
             scheduled_date=timezone.now()
         )

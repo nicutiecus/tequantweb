@@ -20,11 +20,11 @@ export default function Testimonials () {
   },
   {
     id: 3,
-    name: "Kelvin Showoolu",
+    name: "Kelvin Showoolu PhD",
     role: "Computer Science Student, RSU",
     text: "Accessing the LMS notes and videos made revision so easy. The assignments really tested my knowledge. Best tech school in PH!",
     
-    image: "https://drive.google.com/uc?export=view&id=1E17JF1eoPbNUlqxiBseHG0qy5RCT9F35"
+    image: "https://drive.google.com/thumbnail?id=1S49o2O7y5r-U5IlaNVXwEs6sT0kugrkg&sz=w1000"
   }
 ];
 

@@ -29,7 +29,9 @@ class Course(models.Model):
     title= models.CharField(max_length=200)
     description = models.TextField()
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    featured_img = models.ImageField(upload_to='course_imgs/', null=True) 
+    featured_img = models.ImageField(upload_to='course_imgs/', null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0) # In Naira
+    is_published = models.BooleanField(default=False)
 
 class Student(models.Model):
     full_name= models.CharField(max_length=200)
@@ -47,6 +49,7 @@ class Topic(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     note = models.TextField()
     video = models.URLField()
+    order = models.PositiveIntegerField(default="0")
 
 # --- Assessment Models ---
 class Exam(models.Model):

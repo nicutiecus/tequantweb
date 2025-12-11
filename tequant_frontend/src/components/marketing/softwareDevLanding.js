@@ -7,8 +7,7 @@ import {
   ArrowRight, 
   Star, 
   Users, 
-  Briefcase,
-  Terminal
+  Briefcase
 } from 'lucide-react';
 
 const SoftwareDevLanding = ({ onNavigate }) => {

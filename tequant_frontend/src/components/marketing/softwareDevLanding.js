@@ -187,7 +187,7 @@ const SoftwareDevLanding = ({ onNavigate }) => {
               <p className="small mb-3">Installment payments available</p>
               <button 
                 className="btn btn-light text-primary btn-lg fw-bold w-100"
-                onClick={() => onNavigate && onNavigate('Register')}
+                onClick={() => onNavigate && onNavigate('/enrollment')}
               >
                 Enroll Now <ArrowRight size={20} className="ms-2" />
               </button>

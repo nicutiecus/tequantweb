@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
-from .serializers import TeacherSerializer, StudentSerializer, CourseSerializer, ModuleSerializer, TopicSerializer
+from .serializers import TeacherSerializer, StudentSerializer, CourseSerializer, ModuleSerializer, TopicSerializer, EnrollmentSerializer
 from .models import Module, Topic, Course, Teacher, Student
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, AllowAny

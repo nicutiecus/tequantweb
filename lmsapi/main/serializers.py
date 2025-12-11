@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Module, Topic, Course, CourseCategory, Teacher, Student
+from .models import Module, Topic, Course, CourseCategory, Teacher, Student, Enrollment
 
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,3 +39,35 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['category','title','description','teacher', 'price', 'featured_image']
+
+
+class EnrollmentSerializer(serializers.ModelSerializer):
+    """
+    Handles student enrollment. 
+    Accepts 'course' as a string (title) from the frontend and looks up the Course object.
+    """
+    # We define 'course' as a CharField here to accept the TITLE string from your frontend.
+    # The default ModelSerializer would expect an Integer ID otherwise.
+    course = serializers.CharField() 
+
+    class Meta:
+        model = Enrollment
+        fields = ['id', 'name', 'email', 'course', 'enrolled_at']
+
+    def validate_course(self, value):
+        """
+        Check if the course with the given title exists in the database.
+        """
+        # Case-insensitive lookup to be user-friendly
+        try:
+            course_obj = Course.objects.get(title__iexact=value)
+            return course_obj
+        except Course.DoesNotExist:
+            raise serializers.ValidationError(f"Course with title '{value}' not found.")
+
+    def create(self, validated_data):
+        """
+        Create the Enrollment instance using the resolved Course object.
+        """
+        # validated_data['course'] is now the actual Course object returned by validate_course
+        return Enrollment.objects.create(**validated_data)

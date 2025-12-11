@@ -66,3 +66,25 @@ class Question(models.Model):
     option_c = models.CharField(max_length=200)
     option_d = models.CharField(max_length=200)
     correct_option = models.CharField(max_length=1, choices=[('A','A'), ('B','B'), ('C','C'), ('D','D')])
+
+
+
+class Enrollment(models.Model):
+    """
+    Records a student's registration for a specific course.
+    """
+    name = models.CharField(max_length=255, help_text="Student's Full Name")
+    email = models.EmailField(help_text="Student's Email Address")
+    
+    # Link to the Course model. 
+    # on_delete=models.CASCADE means if the course is deleted, enrollments are too.
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
+    
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+    
+    # Status fields (Useful for future payment integration)
+    is_paid = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.name} - {self.course.title}"
+

@@ -91,3 +91,22 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Topic.objects.all().order_by('module__id', 'order')
     serializer_class = TopicSerializer
     permission_classes = [AllowAny]
+
+class EnrollmentView(APIView):
+    """
+    API endpoint to handle student enrollment.
+    Endpoint: POST /api/enroll/
+    """
+    permission_classes = [AllowAny] # Allow public access for registration
+
+    def post(self, request, format=None):
+        serializer = EnrollmentSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            enrollment = serializer.save()
+            return Response({
+                "message": f"Successfully enrolled in {enrollment.course.title}s",
+                "enrollment_id": enrollment.id
+            }, status=status.HTTP_201_CREATED)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

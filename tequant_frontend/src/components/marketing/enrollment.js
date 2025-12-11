@@ -37,7 +37,7 @@ const EnrollmentPage = ({ onNavigate, selectedCourse = "Full-Stack Software Deve
 
     // 1. Get API URL from environment variables (best practice)
     // For Vite use import.meta.env.VITE_API_URL, for CRA use process.env.REACT_APP_API_URL
-    const API_BASE = process.env?.VITE_API_URL || 'http://localhost:8000'; 
+    const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000'; 
 
     try {
       // 2. Prepare the payload matching your "Enrollment" database table structure
@@ -49,7 +49,7 @@ const EnrollmentPage = ({ onNavigate, selectedCourse = "Full-Stack Software Deve
 
       // 3. Send POST request to backend
       // Note: You will need to create a corresponding view in your Django backend at /api/enroll/
-      const response = await fetch(`${API_BASE}/api/enroll/`, {
+      const response = await fetch(`${API_BASE}/lmsapi/enroll/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -11,6 +11,8 @@ router.register(r'modules', views.ModuleViewSet) # Assuming you have these
 router.register(r'topics', views.TopicViewSet)   # Assuming you have these
 
 
+
+
 urlpatterns = [
     path('', include(router.urls)),
     path('teacher/',views.TeacherList.as_view()),
@@ -19,5 +21,7 @@ urlpatterns = [
     path('student/',views.StudentList.as_view()),
     path('student/<int:pk>',views.StudentDetail.as_view()),
     path('student_login/',views.student_login),
-    path('course/',views.CourseList.as_view())
+    path('course/',views.CourseList.as_view()),
+    path('enrollment/',views.EnrollmentView.as_view())
+    
 ]

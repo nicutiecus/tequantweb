@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
 from .serializers import TeacherSerializer, StudentSerializer, CourseSerializer, ModuleSerializer, TopicSerializer, EnrollmentSerializer
-from .models import Module, Topic, Course, Teacher, Student
+from .models import Module, Topic, Course, Teacher, Student, Enrollment
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, AllowAny
 
@@ -92,12 +92,14 @@ class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TopicSerializer
     permission_classes = [AllowAny]
 
-class EnrollmentView(APIView):
+class EnrollmentView(generics.ListCreateAPIView):
     """
     API endpoint to handle student enrollment.
     Endpoint: POST /api/enroll/
     """
     permission_classes = [AllowAny] # Allow public access for registration
+    queryset = Enrollment.objects.all()
+    serializer_class = EnrollmentSerializer
 
     def post(self, request, format=None):
         serializer = EnrollmentSerializer(data=request.data)

@@ -33,6 +33,9 @@ class Course(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0) # In Naira
     is_published = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.title
+
 class Student(models.Model):
     full_name= models.CharField(max_length=200)
     email = models.CharField(max_length=200)
@@ -44,12 +47,18 @@ class Module(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     order = models.PositiveIntegerField(default="0")
 
+    def __str__(self):
+        return self.title
+
 class Topic(models.Model):
     title = models.CharField(max_length=225)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     note = models.TextField()
     video = models.URLField()
     order = models.PositiveIntegerField(default="0")
+
+    def __str__(self):
+        return self.title
 
 # --- Assessment Models ---
 class Exam(models.Model):

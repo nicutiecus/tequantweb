@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Code, 
   Server, 
@@ -185,12 +186,13 @@ const SoftwareDevLanding = ({ onNavigate }) => {
             <div className="col-lg-4 text-lg-end">
               <h3 className="fw-bold mb-0">₦200,000</h3>
               <p className="small mb-3">Installment payments available</p>
-              <button 
+              <Link to="/enrollment"><button 
                 className="btn btn-light text-primary btn-lg fw-bold w-100"
                 onClick={() => onNavigate && onNavigate('/enrollment')}
               >
                 Enroll Now <ArrowRight size={20} className="ms-2" />
               </button>
+              </Link>
             </div>
           </div>
         </div>

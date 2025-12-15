@@ -38,7 +38,7 @@ class CourseSerializer(serializers.ModelSerializer):
     modules = ModuleSerializer(many=True, read_only=True)
     class Meta:
         model = Course
-        fields = ['category','title','description','teacher', 'price', 'featured_image']
+        fields = ['category','title','description','teacher', 'price', 'featured_img', 'modules']
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):

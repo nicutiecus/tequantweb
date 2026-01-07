@@ -28,7 +28,7 @@ class Course(models.Model):
     category = models.ForeignKey(CourseCategory, on_delete=models.CASCADE)
     title= models.CharField(max_length=200)
     description = models.TextField()
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name="teacher_courses")
     featured_img = models.ImageField(upload_to='course_imgs/', null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0) # In Naira
     is_published = models.BooleanField(default=False)
@@ -36,15 +36,9 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-class Student(models.Model):
-    full_name= models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
-    interested_categories = models.TextField()
-
 class Module(models.Model):
     title = models.CharField(max_length=225)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_modules")
     order = models.PositiveIntegerField(default="0")
 
     def __str__(self):
@@ -97,3 +91,10 @@ class Enrollment(models.Model):
     def __str__(self):
         return f"{self.name} - {self.course.title}"
 
+
+
+class Student(models.Model):
+    full_name= models.CharField(max_length=200)
+    email = models.ForeignKey(Enrollment,max_length=200, on_delete= models.CASCADE)
+    password = models.CharField(max_length=200)
+    interested_categories = models.TextField()

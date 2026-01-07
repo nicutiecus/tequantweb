@@ -5,23 +5,23 @@ export default function Testimonials () {
   {
     id: 1,
     name: "Chioma Okorie",
-    role: "Data Analyst at OilServ",
-    text: "TE Quant changed my career path. The instructors in Port Harcourt were very hands-on. I went from knowing nothing about Excel to building predictive models in Python.",
+    role: "Lawyer",
+    text: "TE Quant changed my career path. The instructors in Port Harcourt were very hands-on. I went from knowing nothing about Excel to building pivot tables.",
     
-    image: "https://drive.google.com/uc?export=view&id=1C2AijVG9tbRqV_5EgN0xiBvPZn8tJBng" 
+    image: "https://drive.google.com/thumbnail?id=1C2AijVG9tbRqV_5EgN0xiBvPZn8tJBng&sz=w1000" 
   },
   {
     id: 2,
     name: "Ruth Oriyomi",
-    role: "Freelance Developer",
-    text: "The coding bootcamp during the August break was intense but worth it. I built my first full website in just 4 weeks. Highly recommend for any student in Rivers State.",
+    role: "Business Owner",
+    text: "I highly recommend for any student in Rivers State.",
     
-    image: "https://drive.google.com/uc?export=view&id=15xjEgOGsvQhVbIVtsUgtyUnQ50BIzJ9w"
+    image: "https://drive.google.com/thumbnail?id=15xjEgOGsvQhVbIVtsUgtyUnQ50BIzJ9w&sz=w1000"
   },
   {
     id: 3,
     name: "Kelvin Showoolu PhD",
-    role: "Computer Science Student, RSU",
+    role: "Business Admin Expert",
     text: "Accessing the LMS notes and videos made revision so easy. The assignments really tested my knowledge. Best tech school in PH!",
     
     image: "https://drive.google.com/thumbnail?id=1S49o2O7y5r-U5IlaNVXwEs6sT0kugrkg&sz=w1000"

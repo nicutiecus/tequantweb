@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Module, Topic, Course, CourseCategory, Teacher, Student, Enrollment
+from django.contrib.auth.models import User
+from django.db import transaction
 
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,13 +34,14 @@ class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         # Assuming module links back to a Course via a ForeignKey, and has duration properties
-        fields = ('id', 'title', 'description', 'course', 'topics', 'total_duration')
+        fields = ('id', 'title', 'course', 'topics')
 
 class CourseSerializer(serializers.ModelSerializer):
-    modules = ModuleSerializer(many=True, read_only=True)
+    #modules = ModuleSerializer(many=True, read_only=True)
     class Meta:
         model = Course
-        fields = ['category','title','description','teacher', 'price', 'featured_img', 'modules']
+        fields = ['category','title','description','teacher', 'price', 'featured_img', 'course_modules']
+        #depth = 1
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):
@@ -65,9 +68,49 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         except Course.DoesNotExist:
             raise serializers.ValidationError(f"Course with title '{value}' not found.")
 
+    
+    @transaction.atomic
     def create(self, validated_data):
         """
-        Create the Enrollment instance using the resolved Course object.
+        Creates an Enrollment. 
+        Reuse existing User/Student if email matches, otherwise create new.
         """
-        # validated_data['course'] is now the actual Course object returned by validate_course
-        return Enrollment.objects.create(**validated_data)
+        name = validated_data.get('name')
+        email = validated_data.get('email')
+        course = validated_data.get('course') # This is the resolved Course object
+
+        # 1. PREVENT DUPLICATE USER/PROFILE
+        # get_or_create checks if a user with this email (username) already exists.
+        # If yes -> returns existing user. If no -> creates new one.
+        user, user_created = User.objects.get_or_create(
+            username=email, 
+            defaults={
+                'email': email,
+                'first_name': name.split(' ')[0],
+                'last_name': ' '.join(name.split(' ')[1:]) if ' ' in name else '',
+            }
+        )
+
+        if user_created:
+            # Only set password for NEW users
+            temp_password = User.objects.make_random_password()
+            user.set_password(temp_password)
+            user.save()
+            # In a real app, trigger an email here: send_welcome_email(user, temp_password)
+
+        # 2. GET OR CREATE STUDENT PROFILE
+        # Ensures we use the exact same Student ID if they enroll in a second course.
+        student, _ = Student.objects.get_or_create(user=user)
+
+        # 3. CREATE ENROLLMENT
+        # We use get_or_create here too, to prevent enrolling in the EXACT same course twice.
+        enrollment, enrollment_created = Enrollment.objects.get_or_create(
+            student=student,
+            course=course,
+            defaults={
+                'name': name,
+                'email': email
+            }
+        )
+        
+        return enrollment

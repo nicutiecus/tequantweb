@@ -62,7 +62,7 @@ class CourseList(generics.ListCreateAPIView):
     serializer_class = CourseSerializer
     #permission_classes = [permissions.IsAuthenticated]
 
-class CourseViewSet(viewsets.ReadOnlyModelViewSet):
+class CourseDetails(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint that allows Courses to be viewed.
     A Course is the primary learning resource container.
@@ -112,3 +112,11 @@ class EnrollmentView(generics.ListCreateAPIView):
             }, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class CourseModuleList(generics.ListAPIView):
+    serializer_class = ModuleSerializer
+
+    def get_queryset(self):
+        course_id=self.kwargs["course_id"]
+        course= Course.objects.get(pk=course_id)
+        return Module.objects.filter(course=course)

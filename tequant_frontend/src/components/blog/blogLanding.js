@@ -3,9 +3,9 @@ import { useState, useMemo } from "react";
 import BlogCardHorizontal from "./blogCardHorizontal";
 import { Search, Mail} from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-console.log("Sidebar:", BlogSidebar); // If this logs an Object { ... }, your import is wrong.
-console.log("Card:", BlogCardHorizontal); // It should log a Function.
+
 
 const BLOG_POSTS = [
   {

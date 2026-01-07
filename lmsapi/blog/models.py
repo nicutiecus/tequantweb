@@ -28,6 +28,7 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=(('draft', 'Draft'), ('published', 'Published')), default='draft')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
+    image = models.CharField(default="")
 
     class Meta:
         ordering = ('-publish',)

@@ -1,31 +1,9 @@
-import { Layers, ClockIcon, ChevronDown, Star, Monitor, HardHat } from "lucide-react";
-
-const TUTORS = [
-  {
-    id: 1,
-    name: "Dr. Chioma Okeke",
-    role: "Founder & Lead Data Science Instructor",
-    bio: "Ex-Google Data Scientist with a passion for bringing world-class tech education to the Niger Delta. Specializes in Python and ML.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: 2,
-    name: "David Bassey",
-    role: "Head of Software Development",
-    bio: "Full-stack wizard specializing in Django and React. Has mentored over 200 students in PH.",
-    image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: 3,
-    name: "Sarah Ibe",
-    role: "Community Manager",
-    bio: "Ensures every student gets the support they need. Sarah manages our bootcamps and student events.",
-    image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-  }
-];
-
-
-
+import { Layers, ClockIcon, ChevronDown, Star, Monitor, HardHat, CheckCircle,
+  Calendar, User, Award, Link
+ } from "lucide-react";
+import { useParams, Link as RouterLink, useNavigate } from "react-router-dom"; 
+import { useState, useMemo, useEffect } from "react";
+import axios from "axios";
 
 const ModuleAccordion = ({ module }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +28,7 @@ const ModuleAccordion = ({ module }) => {
       {isOpen && (
         <div className="card-body bg-light">
           <ul className="list-unstyled mb-0 small text-muted">
-            {module.topics.map((topic, index) => (
+            {module.topics && module.topics.map((topic, index) => (
               <li key={index} className="py-1 d-flex align-items-center">
                 <CheckCircle size={14} className="me-2 text-success opacity-75 flex-shrink-0" />
                 {topic}
@@ -63,23 +41,76 @@ const ModuleAccordion = ({ module }) => {
   );
 };
 
-export default function CourseDetailPage  ({ course, onNavigate }) {
+export default function CourseDetailPage() {
+  const { course_id } = useParams();
+  const navigate = useNavigate();
 
+  // State for data
+  const [course, setCourse] = useState(null);
+  const [modules, setModules] = useState(null);
+  const [teachers, setTeachers] = useState([]); // State to hold all fetched teachers
+  
+  // State for UI
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // Fetch Course, Modules, and Teachers in parallel
+        const [courseRes, moduleRes, teacherRes] = await Promise.all([
+          axios.get(`http://127.0.0.1:8000/lmsapi/courses/${course_id}`),
+          axios.get(`http://127.0.0.1:8000/lmsapi/course-module/${course_id}`),
+          axios.get(`http://127.0.0.1:8000/lmsapi/teacher`) // Fetching teachers from API
+        ]);
+
+        setCourse(courseRes.data);
+        setModules(moduleRes.data);
+        setTeachers(teacherRes.data);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Failed to load course details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (course_id) {
+      fetchData();
+    }
+  }, [course_id]);
+
+  // Filter the fetched teachers based on the course's teacher ID(s)
   const tutors = useMemo(() => {
-    if (!course || !course.tutorIds) return [];
-    return TUTORS.filter(tutor => course.tutorIds.includes(tutor.id));
-  }, [course]);
+    if (!course || !course.teacher || teachers.length === 0) return [];
+    
+    // Handle case where course.teacher might be a single ID or an array of IDs
+    const teacherIds = Array.isArray(course.teacher) ? course.teacher : [course.teacher];
+    
+    // Filter the 'teachers' state derived from the API
+    return teachers.filter(tutor => teacherIds.includes(tutor.id));
+  }, [course, teachers]);
 
-  // Handle case where course data is missing
-  if (!course) {
+  if (loading) {
+    return (
+      <div className="container py-5 mt-5 text-center d-flex justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !course) {
     return (
       <div className="container py-5 mt-5 text-center">
         <h1 className="fw-bold text-danger">404 - Course Not Found</h1>
-        <p className="lead">The course you are looking for does not exist or has been retired.</p>
-        <Link to="courses" className="btn btn-primary btn-lg mt-3" onClick={onNavigate}>
+        <p className="lead">{error || "The course you are looking for does not exist."}</p>
+        <button className="btn btn-primary btn-lg mt-3" onClick={() => navigate('/courses')}>
           Back to Course Catalog
-        </Link>
+        </button>
       </div>
     );
   }
@@ -92,7 +123,9 @@ export default function CourseDetailPage  ({ course, onNavigate }) {
         <div className="container">
           <div className="row">
             <div className="col-lg-8">
-              <span className="badge bg-primary-subtle text-primary mb-3 text-uppercase fw-bold">{course.category}</span>
+              <span className="badge bg-primary-subtle text-primary mb-3 text-uppercase fw-bold">
+                {course.category || "General"}
+              </span>
               <h1 className="display-5 fw-bold mb-3">{course.title}</h1>
               <p className="lead text-secondary">{course.description}</p>
               
@@ -104,7 +137,7 @@ export default function CourseDetailPage  ({ course, onNavigate }) {
                 </div>
                 <div className="d-flex align-items-center text-primary">
                   <Monitor size={20} className="me-1" />
-                  <span className="fw-bold small">{course.level}</span>
+                  <span className="fw-bold small">{course.level || "All Levels"}</span>
                 </div>
               </div>
             </div>
@@ -119,10 +152,10 @@ export default function CourseDetailPage  ({ course, onNavigate }) {
           <div className="col-lg-8">
             <h3 className="fw-bold mb-4 border-bottom pb-2">Course Curriculum</h3>
             
-            {course.modules && course.modules.length > 0 ? (
+            {modules && modules.length > 0 ? (
                 <div className="accordion">
-                  {course.modules.map(module => (
-                    <ModuleAccordion key={module.id} module={module} />
+                  {modules.map((module, idx) => (
+                    <ModuleAccordion key={module.id || idx} module={module} />
                   ))}
                 </div>
             ) : (
@@ -133,7 +166,7 @@ export default function CourseDetailPage  ({ course, onNavigate }) {
             
             <h3 className="fw-bold my-4 border-bottom pb-2">Tutors & Mentors</h3>
             <div className="row g-3">
-              {tutors.map(tutor => (
+              {tutors.length > 0 ? tutors.map(tutor => (
                 <div key={tutor.id} className="col-md-6">
                   <div className="d-flex p-3 bg-light rounded-3 shadow-sm align-items-center">
                     <img 
@@ -144,21 +177,30 @@ export default function CourseDetailPage  ({ course, onNavigate }) {
                     />
                     <div>
                       <h6 className="fw-bold mb-0">{tutor.name}</h6>
-                      <small className="text-primary fw-bold">{tutor.role}</small>
+                      <small className="text-primary fw-bold">{tutor.role || "Instructor"}</small>
                       <p className="small text-muted mb-0 mt-1 line-clamp-2">{tutor.bio}</p>
                     </div>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="col-12 text-muted">
+                    {/* Fallback if no matching tutors found */}
+                    Instructor details updating...
+                </div>
+              )}
             </div>
 
             <h3 className="fw-bold my-4 border-bottom pb-2">Prerequisites</h3>
             <div className="d-flex flex-wrap gap-2">
-              {course.prerequisites.map((req, index) => (
-                <span key={index} className="badge bg-secondary-subtle text-secondary py-2 px-3 rounded-pill d-flex align-items-center">
-                  <HardHat size={14} className="me-1" /> {req}
-                </span>
-              ))}
+              {course.prerequisites && course.prerequisites.length > 0 ? (
+                course.prerequisites.map((req, index) => (
+                  <span key={index} className="badge bg-secondary-subtle text-secondary py-2 px-3 rounded-pill d-flex align-items-center">
+                    <HardHat size={14} className="me-1" /> {req}
+                  </span>
+                ))
+              ) : (
+                 <span className="text-muted">No specific prerequisites listed.</span>
+              )}
             </div>
             
           </div>
@@ -188,10 +230,22 @@ export default function CourseDetailPage  ({ course, onNavigate }) {
                 
                 <h6 className="fw-bold mb-3 text-muted">What you will gain:</h6>
                 <ul className="list-unstyled small">
-                  <li className="mb-2 d-flex align-items-center"><ClockIcon size={18} className="me-2 text-primary" /> {course.durationWeeks} Weeks of Intensive Training</li>
-                  <li className="mb-2 d-flex align-items-center"><Calendar size={18} className="me-2 text-primary" /> Next Start Date: {new Date(course.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</li>
-                  <li className="mb-2 d-flex align-items-center"><Award size={18} className="me-2 text-primary" /> TE Quant Professional Certificate</li>
-                  <li className="mb-2 d-flex align-items-center"><User size={18} className="me-2 text-primary" /> Lifetime Access to LMS Materials</li>
+                  <li className="mb-2 d-flex align-items-center">
+                    <ClockIcon size={18} className="me-2 text-primary" /> 
+                    {course.durationWeeks} Weeks of Intensive Training
+                  </li>
+                  <li className="mb-2 d-flex align-items-center">
+                    <Calendar size={18} className="me-2 text-primary" /> 
+                    Next Start Date: {course.startDate ? new Date(course.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'TBA'}
+                  </li>
+                  <li className="mb-2 d-flex align-items-center">
+                    <Award size={18} className="me-2 text-primary" /> 
+                    TE Quant Professional Certificate
+                  </li>
+                  <li className="mb-2 d-flex align-items-center">
+                    <User size={18} className="me-2 text-primary" /> 
+                    Lifetime Access to LMS Materials
+                  </li>
                 </ul>
 
                 <hr className="my-3"/>
@@ -206,8 +260,7 @@ export default function CourseDetailPage  ({ course, onNavigate }) {
       
       {/* Grounding Image/Concept */}
       <div className="container pb-5 text-center">
-        <p className="text-muted small mt-5">Visualizing the outcome of your data analysis skills:</p>
-        [Image of a data analyst dashboard]
+        <p className="text-muted small mt-5">Visualizing the outcome of your {course.title} skills:</p>
       </div>
     </div>
   );

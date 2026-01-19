@@ -104,12 +104,12 @@ class Staff(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=200)
     role = models.CharField(max_length=100, default='Editor')
-    image = models.CharField(max_length=250)
+    image = models.ImageField(upload_to='staff_imgs/', null=True)
     
     # Access Controls
     can_create_blog = models.BooleanField(default=True)
     can_publish_blog = models.BooleanField(default=False) # Requires admin approval
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -13,6 +13,10 @@ import os
 from pathlib import Path
 import dj_database_url
 from decouple import config
+from dotenv import load_dotenv
+
+# Load variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -173,6 +177,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build')
 
 STATIC_URL = 'static/'
 
+# Email Configuration (Example for Gmail)
+# For production, use a service like SendGrid, Mailgun, or Amazon SES
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST =  os.environ.get('EMAIL_HOST')
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') # REPLACE THIS with your official email
+EMAIL_HOST_PASSWORD =  os.environ.get('EMAIL_HOST_PASSWORD') # REPLACE THIS with your App Password (not your login password)
+DEFAULT_FROM_EMAIL = 'TE Quant Resources <support@tequant.ng>'
 
 
 # Default primary key field type

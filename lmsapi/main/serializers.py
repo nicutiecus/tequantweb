@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Module, Topic, Course, CourseCategory, Teacher, Student, Enrollment
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.utils.crypto import get_random_string
 
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,42 +41,31 @@ class CourseSerializer(serializers.ModelSerializer):
     #modules = ModuleSerializer(many=True, read_only=True)
     class Meta:
         model = Course
-        fields = ['category','title','description','teacher', 'price', 'featured_img', 'course_modules']
+        fields = ['id','category','title','description','teacher', 'price', 'featured_img', 'course_modules']
         #depth = 1
 
 
-class EnrollmentSerializer(serializers.ModelSerializer):
-    """
+"""class EnrollmentSerializer(serializers.ModelSerializer):
+    '''
     Handles student enrollment. 
     Accepts 'course' as a string (title) from the frontend and looks up the Course object.
-    """
-    # We define 'course' as a CharField here to accept the TITLE string from your frontend.
+    '''
     # The default ModelSerializer would expect an Integer ID otherwise.
-    course = serializers.CharField() 
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
 
     class Meta:
         model = Enrollment
-        fields = ['id', 'name', 'email', 'course', 'enrolled_at']
+        fields = fields = ['id', 'enrollment_id', 'course', 'full_name', 'email', 'phone_number', 'address', 'is_paid', 'created_at']
 
-    def validate_course(self, value):
-        """
-        Check if the course with the given title exists in the database.
-        """
-        # Case-insensitive lookup to be user-friendly
-        try:
-            course_obj = Course.objects.get(title__iexact=value)
-            return course_obj
-        except Course.DoesNotExist:
-            raise serializers.ValidationError(f"Course with title '{value}' not found.")
 
     
     @transaction.atomic
     def create(self, validated_data):
-        """
+        '''
         Creates an Enrollment. 
         Reuse existing User/Student if email matches, otherwise create new.
-        """
-        name = validated_data.get('name')
+        '''
+        name = validated_data.get('full_name')
         email = validated_data.get('email')
         course = validated_data.get('course') # This is the resolved Course object
 
@@ -93,7 +83,7 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 
         if user_created:
             # Only set password for NEW users
-            temp_password = User.objects.make_random_password()
+            temp_password = get_random_string(length=12)
             user.set_password(temp_password)
             user.save()
             # In a real app, trigger an email here: send_welcome_email(user, temp_password)
@@ -105,12 +95,51 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         # 3. CREATE ENROLLMENT
         # We use get_or_create here too, to prevent enrolling in the EXACT same course twice.
         enrollment, enrollment_created = Enrollment.objects.get_or_create(
-            student=student,
+            email=email,
             course=course,
             defaults={
-                'name': name,
-                'email': email
+                'full_name': name,
+                'phone_number': validated_data.get('phone_number'),
+                'address': validated_data.get('address')
             }
         )
         
         return enrollment
+    
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['course'] = {
+            'id': instance.course.id,
+            'title': instance.course.title,
+            'price': instance.course.price,
+        }
+        return response 
+        
+"""
+class EnrollmentSerializer(serializers.ModelSerializer):
+    # INPUT: Expect a Course ID (Integer)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+    
+    class Meta:
+        model = Enrollment
+        # We only map fields that ACTUALLY exist in your Enrollment model
+        fields = ['id', 'enrollment_id', 'course', 'first_name', 'email', 'is_paid', 'created_at']
+
+    # We REMOVED the 'create' method. 
+    # Django's default behavior is perfect here: it simply saves the Enrollment 
+    # to the database without trying to create linked Users or Students.
+    
+
+    # OUTPUT: Show Course Title in the response (for frontend display)
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        try:
+            response['course'] = {
+                'id': instance.course.id,
+                'title': instance.course.title,
+                'price': instance.course.price,
+            }
+        except AttributeError:
+            # Fallback if course data is missing
+            pass
+        return response

@@ -1,11 +1,12 @@
 from django.db import models
+import uuid
 
 #Teacher model
 class Teacher(models.Model):
     full_name= models.CharField(max_length=200)
     email = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
-    role = models.CharField(default="null", max_length=200)
+    role = models.CharField(default="staff", max_length=200)
     bio = models.TextField(default="no bio yet")
     image = models.CharField(default="no pic yet", max_length=225)
 
@@ -71,30 +72,28 @@ class Question(models.Model):
     correct_option = models.CharField(max_length=1, choices=[('A','A'), ('B','B'), ('C','C'), ('D','D')])
 
 
-
 class Enrollment(models.Model):
-    """
-    Records a student's registration for a specific course.
-    """
-    name = models.CharField(max_length=255, help_text="Student's Full Name")
-    email = models.EmailField(help_text="Student's Email Address")
+    # This ID will be used in the URL: /checkout/550e8400-e29b...
+    enrollment_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     
-    # Link to the Course model. 
-    # on_delete=models.CASCADE means if the course is deleted, enrollments are too.
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
+    # Link to your existing Course model
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
     
-    enrolled_at = models.DateTimeField(auto_now_add=True)
+    first_name = models.CharField(max_length=200)
+    email = models.EmailField()
     
-    # Status fields (Useful for future payment integration)
+    # Track status
     is_paid = models.BooleanField(default=False)
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return f"{self.name} - {self.course.title}"
+        return f"{self.first_name} - {self.course.title}"
+
 
 
 
 class Student(models.Model):
     full_name= models.CharField(max_length=200)
-    email = models.ForeignKey(Enrollment,max_length=200, on_delete= models.CASCADE)
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=200)
     interested_categories = models.TextField()

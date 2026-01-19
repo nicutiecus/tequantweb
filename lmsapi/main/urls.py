@@ -19,12 +19,17 @@ urlpatterns = [
     path('teacher_login/',views.teacher_login),
     path('student/',views.StudentList.as_view()),
     path('student/<int:pk>',views.StudentDetail.as_view()),
+    path('student-register/', views.StudentRegistrationView.as_view()),
     path('student_login/',views.student_login),
     path('courses/',views.CourseList.as_view()),
     path('courses/<int:pk>',views.CourseDetails.as_view()),
     path('enrollment/',views.EnrollmentView.as_view()),
     #specific course module
-    path('course-module/<int:course_id>',views.CourseModuleList.as_view())
+    path('course-module/<int:course_id>',views.CourseModuleList.as_view()),
+    path('checkout-info/<uuid:enrollment_id>/', views.CheckoutInfoView.as_view()),
+    path('verify-payment/', views.VerifyPaymentView.as_view()),
+    path('my-courses/<str:email>/', views.MyCoursesList.as_view()),
+
     
     
 ]

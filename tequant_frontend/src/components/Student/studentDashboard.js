@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { 
   BookOpen, 
   FileText, 
@@ -17,13 +19,36 @@ import {
   Save
 } from 'lucide-react';
 
-const StudentDashboard = ({ onNavigate, user }) => {
+const StudentDashboard = ({user }) => {
+  const navigate=useNavigate();
   const [activeTab, setActiveTab] = useState('courses');
+  const [courses, setCourses] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [loading, setLoading] = useState(true);
+  // 1. SECURITY FIX: Get email from Storage instead of URL
+  const studentEmail = localStorage.getItem('studentEmail') || user?.email;
 
-  // Dummy User Data
-  const studentName = user?.name || "Student";
-  const studentEmail = user?.email || "student@example.com";
+  //Dummy student data
+  const studentName = 'Tamar'
+
+  // 2. BACKEND CONNECTION: Fetch Real Courses
+  useEffect(() => {
+    if (!studentEmail) {
+      alert("Please log in first.");
+      navigate('/');
+      return;
+    }
+
+    axios.get(`http://127.0.0.1:8000/lmsapi/my-courses/${studentEmail}/`)
+      .then(res => {
+        setCourses(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching courses", err);
+        setLoading(false);
+      });
+  }, [studentEmail, navigate]);
   
   // Mock Data
   const enrolledCourses = [
@@ -66,14 +91,12 @@ const StudentDashboard = ({ onNavigate, user }) => {
   ];
 
   const handleLogout = () => {
-    // Clear tokens if any
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    if (onNavigate) onNavigate('Home');
+    localStorage.removeItem('studentEmail');
+    navigate('/');
   };
 
   return (
-    <div className="d-flex min-vh-100 bg-light font-sans overflow-hidden">
+    <div className="d-flex min-vh-100 bg-light font-sans overflow-hidden" style={{marginTop: '80px'}}>
       
       {/* --- SIDEBAR --- */}
       <aside 
@@ -248,7 +271,7 @@ const StudentDashboard = ({ onNavigate, user }) => {
                           
                           <button 
                             className="btn btn-outline-primary w-100 fw-bold d-flex align-items-center justify-content-center"
-                            onClick={() => onNavigate && onNavigate({ page: 'CourseDetail', id: course.id })}
+                            onClick={() => navigate && navigate({ page: 'CourseDetail', id: course.id })}
                           >
                             {course.progress > 0 ? 'Continue Learning' : 'Start Course'} 
                             <PlayCircle size={16} className="ms-2" />
@@ -268,7 +291,7 @@ const StudentDashboard = ({ onNavigate, user }) => {
                             </div>
                             <h6 className="fw-bold">Explore New Courses</h6>
                             <p className="text-muted small mb-3">Browse our catalog to find<br/>your next skill.</p>
-                            <button className="btn btn-sm btn-primary" onClick={() => onNavigate && onNavigate('Home')}>Browse Catalog</button>
+                            <button className="btn btn-sm btn-primary" onClick={() => navigate && navigate('Home')}>Browse Catalog</button>
                         </div>
                     </div>
                 </div>

@@ -220,9 +220,11 @@ export default function CourseDetailPage() {
                 </h2>
                 
                 <div className="d-grid mb-3">
+                  <RouterLink to={`/enrollment/${course.id}`}>
                   <button className="btn btn-primary btn-lg fw-bold">
                     Register for this Course
                   </button>
+                  </RouterLink>
                 </div>
                 <button className="btn btn-outline-dark w-100 mb-4">
                     Download Full Syllabus

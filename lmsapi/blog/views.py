@@ -4,6 +4,8 @@ from .models import Profile, Post, Comment, Category
 from .serializers import ProfileSerializer, PostSerializer, CommentSerializer, RegisterSerializer, UserSerializer, CategorySerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .permissions import IsOwnerOrReadOnly
+from main.models import Staff
+from rest_framework.response import Response
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -68,3 +70,28 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CategoryListView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class StaffPostListCreateView(generics.ListCreateAPIView):
+    queryset = Post.objects.all().order_by('-created')
+    serializer_class = PostSerializer
+
+    def post(self, request, *args, **kwargs):
+        staff_id = request.data.get('author')
+        
+        # 1. Verify Staff Exists
+        try:
+            staff = Staff.objects.get(id=staff_id)
+        except Staff.DoesNotExist:
+            return Response({'error': 'Invalid Staff ID'}, status=400)
+
+        # 2. Check "Create" Permission
+        if not staff.can_create_blog:
+            return Response({'error': 'You do not have permission to create blogs'}, status=403)
+
+        # 3. Handle "Publish" Permission
+        # If they try to publish but don't have rights, force it to 'draft'
+        requested_status = request.data.get('status', 'draft')
+        if requested_status == 'published' and not staff.can_publish_blog:
+            request.data['status'] = 'draft' # Force downgrade
+        
+        return super().post(request, *args, **kwargs)

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
 from .serializers import TeacherSerializer, StudentSerializer, CourseSerializer, ModuleSerializer, TopicSerializer, EnrollmentSerializer
-from .models import Module, Topic, Course, Teacher, Student, Enrollment
+from .models import Module, Topic, Course, Teacher, Student, Enrollment, Staff
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, AllowAny
 from django.core.mail import send_mail
@@ -301,9 +301,8 @@ class StudentLoginView(APIView):
             # Find student by email
             student = Student.objects.get(email=email)
             
-            # Verify Password (simple check since we stored it directly)
-            # Note: In a real app, use hashing (check_password)
-            if student.password == password:
+            # Verify Password 
+            if check_password(password, student.password): 
                 return Response({
                     'bool': True,
                     'student_id': student.id,
@@ -321,3 +320,29 @@ class StudentLoginView(APIView):
                 'bool': False,
                 'msg': 'Account does not exist'
             }, status=status.HTTP_404_NOT_FOUND)
+        
+
+
+class StaffLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        try:
+            staff = Staff.objects.get(email=email)
+            if check_password(password, staff.password):
+                return Response({
+                    'bool': True,
+                    'staff_id': staff.id,
+                    'full_name': staff.full_name,
+                    'permissions': {
+                        'can_create': staff.can_create_blog,
+                        'can_publish': staff.can_publish_blog
+                    }
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({'bool': False, 'msg': 'Invalid Password'}, status=400)
+        except Staff.DoesNotExist:
+            return Response({'bool': False, 'msg': 'Staff account not found'}, status=404)

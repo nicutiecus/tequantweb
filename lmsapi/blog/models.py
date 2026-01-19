@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from main.models import Staff
 from django.contrib.auth.models import User
 from django.utils import timezone # Best practice for publish dates
 import time # Import at top level
@@ -25,7 +26,7 @@ class Profile(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=191, unique_for_date='publish')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    author = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='blog_posts')
     body = models.TextField()
     
     # BEST PRACTICE FIX: Use default=timezone.now so you can edit the publish date later

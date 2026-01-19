@@ -97,3 +97,24 @@ class Student(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=200)
     interested_categories = models.TextField()
+
+
+class Staff(models.Model):
+    full_name = models.CharField(max_length=200)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=200)
+    role = models.CharField(max_length=100, default='Editor')
+    image = models.CharField(max_length=250)
+    
+    # Access Controls
+    can_create_blog = models.BooleanField(default=True)
+    can_publish_blog = models.BooleanField(default=False) # Requires admin approval
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.full_name} ({self.role})"
+    
+    class Meta:
+        verbose_name_plural = "Staff Members"
+

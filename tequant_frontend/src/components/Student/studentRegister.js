@@ -45,7 +45,7 @@ const StudentRegister = () => {
         .then(res => {
             alert("Registration Complete! Welcome.");
             localStorage.setItem('studentEmail', formData.email);
-            navigate('/student-dashboard');
+            navigate('/student-login');
         })
         .catch(err => {
             console.log(err);

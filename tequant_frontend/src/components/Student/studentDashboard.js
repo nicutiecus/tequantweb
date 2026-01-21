@@ -28,8 +28,7 @@ const StudentDashboard = ({user }) => {
   // 1. SECURITY FIX: Get email from Storage instead of URL
   const studentEmail = localStorage.getItem('studentEmail') || user?.email;
 
-  //Dummy student data
-  const studentName = 'Tamar'
+
 
   // 2. BACKEND CONNECTION: Fetch Real Courses
   useEffect(() => {
@@ -49,7 +48,8 @@ const StudentDashboard = ({user }) => {
         setLoading(false);
       });
   }, [studentEmail, navigate]);
-  
+  //dummy
+  const studentName = "tamar"
   // Mock Data
   const enrolledCourses = [
     { 

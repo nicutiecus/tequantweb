@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
-from .serializers import TeacherSerializer, StudentSerializer, CourseSerializer, ModuleSerializer, TopicSerializer, EnrollmentSerializer
+from .serializers import TeacherSerializer, StudentListSerializer, CourseSerializer, ModuleSerializer, TopicSerializer, EnrollmentSerializer
 from .models import Module, Topic, Course, Teacher, Student, Enrollment, Staff
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, AllowAny
@@ -43,12 +43,12 @@ def teacher_login(request):
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
-    serializer_class = StudentSerializer
+    serializer_class = StudentListSerializer
     #permission_classes = [permissions.IsAuthenticated]
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
-    serializer_class = StudentSerializer
+    serializer_class = StudentListSerializer
     #permission_classes = [permissions.IsAuthenticated]
 
 
@@ -330,19 +330,49 @@ class StaffLoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
 
+        #(debugging)
+        print(f"🔍 DEBUG: Trying to login with email: {email}")
+
         try:
             staff = Staff.objects.get(email=email)
+
+
             if check_password(password, staff.password):
                 return Response({
                     'bool': True,
                     'staff_id': staff.id,
                     'full_name': staff.full_name,
+                    'email': staff.email,
                     'permissions': {
                         'can_create': staff.can_create_blog,
-                        'can_publish': staff.can_publish_blog
+                        'can_publish': staff.can_publish_blog,
+                        'can_view_students': staff.can_view_students
                     }
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({'bool': False, 'msg': 'Invalid Password'}, status=400)
         except Staff.DoesNotExist:
             return Response({'bool': False, 'msg': 'Staff account not found'}, status=404)
+        
+class StaffStudentListView(generics.ListAPIView):
+    serializer_class = StudentListSerializer
+    permission_classes = [AllowAny] # We manually check staff_id below
+
+    def get_queryset(self):
+        # specific staff_id passed in URL params ?staff_id=5
+        staff_id = self.request.query_params.get('staff_id')
+        #debugging
+        print(f'The staff ID is{staff_id}')
+        
+        if not staff_id:
+            return Student.objects.none()
+
+        try:
+            staff = Staff.objects.get(id=staff_id)
+            # CHECK PERMISSION
+            if staff.can_view_students:
+                return Student.objects.all().order_by('-id')
+            else:
+                return Student.objects.none()
+        except Staff.DoesNotExist:
+            return Student.objects.none()

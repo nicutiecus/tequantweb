@@ -109,6 +109,7 @@ class Staff(models.Model):
     # Access Controls
     can_create_blog = models.BooleanField(default=True)
     can_publish_blog = models.BooleanField(default=False) # Requires admin approval
+    can_view_students = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

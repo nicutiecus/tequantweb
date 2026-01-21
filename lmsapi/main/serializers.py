@@ -9,7 +9,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         model = Teacher
         fields = ['id','full_name','email','password', 'role','bio', 'image']
 
-class StudentSerializer(serializers.ModelSerializer):
+class StudentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id','full_name','email','password','interested_categories']

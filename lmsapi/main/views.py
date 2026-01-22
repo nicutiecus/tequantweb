@@ -24,22 +24,6 @@ class TeacherDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
     #permission_classes = [permissions.IsAuthenticated]
-# Create your views here.
-
-@csrf_exempt
-def teacher_login(request): 
-    email= request.POST['email']
-    password= request.POST['password']
-    try:
-        teacherData = Teacher.objects.get(email=email, password=password)
-    except Teacher.DoesNotExist:
-        teacherData = None
-    if teacherData:
-        return JsonResponse({'bool': True, 'teacherid': teacherData.id})
-    else:
-        return JsonResponse({'bool': False})
-
-#Student
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
@@ -52,15 +36,6 @@ class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     #permission_classes = [permissions.IsAuthenticated]
 
 
-@csrf_exempt
-def student_login(request): 
-    email= request.POST['email']
-    password= request.POST['password']
-    studentData = Student.objects.get(email=email, password=password)
-    if studentData:
-        return JsonResponse({'bool': True})
-    else:
-        return JsonResponse({'bool': False})
 
 class CourseList(generics.ListCreateAPIView):
     queryset = Course.objects.all()
@@ -376,3 +351,63 @@ class StaffStudentListView(generics.ListAPIView):
                 return Student.objects.none()
         except Staff.DoesNotExist:
             return Student.objects.none()
+
+# lmsapi/views.py
+
+
+
+
+# 1. TEACHER LOGIN (Standardized like Staff/Student)
+class TeacherLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        try:
+            teacher = Teacher.objects.get(email=email)
+            if password == teacher.password:  # In production, use check_password()
+                return Response({
+                    'bool': True,
+                    'teacher_id': teacher.id,
+                    'full_name': teacher.full_name,
+                    'email': teacher.email
+                })
+            else:
+                return Response({'bool': False, 'msg': 'Invalid Password'}, status=400)
+        except Teacher.DoesNotExist:
+            return Response({'bool': False, 'msg': 'Teacher Account not found'}, status=404)
+
+# 2. TEACHER'S SPECIFIC COURSES
+class TeacherCourseList(generics.ListCreateAPIView):
+    serializer_class = CourseSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        teacher_id = self.request.query_params.get('teacher_id')
+        if teacher_id:
+            return Course.objects.filter(teacher__id=teacher_id).order_by('-id')
+        return Course.objects.none()
+
+    def perform_create(self, serializer):
+        # Automatically assign the teacher based on the ID sent
+        teacher_id = self.request.data.get('teacher')
+        teacher = Teacher.objects.get(id=teacher_id)
+        serializer.save(teacher=teacher)
+
+# 3. STUDENTS ENROLLED IN TEACHER'S COURSES
+class TeacherStudentList(generics.ListAPIView):
+    serializer_class = StudentListSerializer # We reuse the student serializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        teacher_id = self.request.query_params.get('teacher_id')
+        if not teacher_id:
+            return Student.objects.none()
+        
+        # LOGIC: Find Enrollments for this teacher's courses, then get the students
+        enrollments = Enrollment.objects.filter(course__teacher__id=teacher_id)
+        
+        # Extract unique students from these enrollments
+        student_ids = enrollments.values_list('student', flat=True).distinct()
+        return Student.objects.filter(id__in=student_ids)

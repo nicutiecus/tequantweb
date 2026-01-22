@@ -13,11 +13,11 @@ urlpatterns = [
     path('authors/<str:username>/posts/', views.AuthorPostListView.as_view(), name='author_posts'),
 
     # Posts
-    path('posts/', views.PostListView.as_view(), name='post_list'),
+    path('posts/', views.StaffPostListCreateView.as_view(), name='post_list'),
     path('posts/<slug:slug>/', views.PostDetailView.as_view(), name='post_detail'),
  
     #categories
-    path('category/',views.CategoryListView.as_view()),
+    path('categories/',views.CategoryListView.as_view()),
 
     # Comments
     path('posts/<slug:slug>/comments/', views.CommentListView.as_view(), name='comment_list'),

@@ -3,14 +3,18 @@ from django.contrib.auth.models import User
 from . import models
 
 class PostSerializer(serializers.ModelSerializer):
+    slug = serializers.SlugField(source='Post.slug', read_only=True)
+    category_title = serializers.CharField(source='category.title', read_only=True)
+    author_name = serializers.CharField(source='author.full_name', read_only =True)
     class Meta:
         model = models.Post
-        fields=['title','slug','author','body','publish','created','updated','status','category']
+        fields=['id','title','slug','author','author_name','image','body','publish',
+                'created','updated','status','category_title','category']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model= models.Category
-        fields=['title']
+        fields=['id','title']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,10 +29,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = models.Profile
         fields = ['user', 'bio', 'profile_picture']
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model= models.Category
-        fields=['title']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)

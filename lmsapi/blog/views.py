@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from django.contrib.auth.models import User
 from .models import Profile, Post, Comment, Category
 from .serializers import ProfileSerializer, PostSerializer, CommentSerializer, RegisterSerializer, UserSerializer, CategorySerializer
@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from .permissions import IsOwnerOrReadOnly
 from main.models import Staff
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -74,6 +75,9 @@ class CategoryListView(generics.ListCreateAPIView):
 class StaffPostListCreateView(generics.ListCreateAPIView):
     queryset = Post.objects.all().order_by('-created')
     serializer_class = PostSerializer
+
+    # 👇 THIS IS REQUIRED FOR IMAGE UPLOADS
+    parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, *args, **kwargs):
         staff_id = request.data.get('author')

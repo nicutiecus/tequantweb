@@ -14,9 +14,11 @@ router.register(r'topics', views.TopicViewSet)   # Assuming you have these
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('teacher/',views.TeacherList.as_view()),
+    path('teachers/',views.TeacherList.as_view()),
+    path('teacher-login/', views.TeacherLoginView.as_view()), # Note the trailing slash
+    path('teacher/courses/', views.TeacherCourseList.as_view()),
+    path('teacher/students/', views.TeacherStudentList.as_view()),
     path('teacher/<int:pk>',views.TeacherDetail.as_view()),
-    path('teacher_login/',views.teacher_login),
     path('student/',views.StudentList.as_view()),
     path('student/<int:pk>',views.StudentDetail.as_view()),
     path('student-register/', views.StudentRegistrationView.as_view()),
@@ -31,6 +33,7 @@ urlpatterns = [
     path('checkout-info/<uuid:enrollment_id>/', views.CheckoutInfoView.as_view()),
     path('verify-payment/', views.VerifyPaymentView.as_view()),
     path('my-courses/<str:email>/', views.MyCoursesList.as_view()),
+    
 
     
     

@@ -12,7 +12,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
-const StudentLoginPage = () => {
+const TeacherLoginPage = () => {
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -35,17 +35,21 @@ const StudentLoginPage = () => {
     e.preventDefault();
     setStatus({ loading: true, error: '' });
 
-    const loginUrl = 'http://127.0.0.1:8000/lmsapi/student_login/';
+    const loginUrl = 'http://127.0.0.1:8000/lmsapi/teacher-login/';
 
     axios.post(loginUrl, formData)
       .then(res => {
         if (res.data.bool === true) {
           // 1. Save email to LocalStorage (Required for Dashboard)
-          localStorage.setItem('studentEmail', res.data.email);
-          localStorage.setItem('studentId', res.data.student_id); // Optional: if needed later
+          localStorage.setItem('teacherEmail', res.data.email);
+          localStorage.setItem('teacherId', res.data.teacher_id); // Optional: if needed later
+          localStorage.setItem('teacherName', res.data.full_name);
+          // 2. Save Permissions (Required for Dashboard logic)
+          // We must stringify it because localStorage only stores strings
+          //localStorage.setItem('staffPermissions', JSON.stringify(res.data.permissions));
 
           // 2. Redirect to Dashboard
-          navigate('/student-dashboard');
+          navigate('/teacher-dashboard');
         } else {
           setStatus({ loading: false, error: 'Invalid Email or Password' });
         }
@@ -77,9 +81,9 @@ const StudentLoginPage = () => {
               <button onClick={() => navigate('/')} className="btn btn-outline-light btn-sm mb-4 border-0 d-flex align-items-center gap-2 ps-0">
                 <ArrowLeft size={18} /> Back to Home
               </button>
-              <h2 className="display-5 fw-bold mb-4">Welcome Back!</h2>
+              <h2 className="display-5 fw-bold mb-4">Staff Portal</h2>
               <p className="lead text-white-50 mb-4">
-                Continue your learning journey. Access your courses, assignments, and certificates.
+                Manage blog posts, view student data, and handle administrative tasks.
               </p>
             </div>
 
@@ -96,7 +100,7 @@ const StudentLoginPage = () => {
           {/* Right Side - Form */}
           <div className="col-lg-6 p-5 bg-white">
             <div className="text-center mb-5">
-              <h3 className="fw-bold text-dark mb-2">Student Login</h3>
+              <h3 className="fw-bold text-dark mb-2">Teacher Login</h3>
               <p className="text-muted">Enter your credentials to access your account</p>
             </div>
 
@@ -170,11 +174,10 @@ const StudentLoginPage = () => {
 
             <div className="mt-5 text-center">
               <p className="text-muted">
-                Don't have an account?{' '}
-                {/* Changed Button to Link for React Router */}
-                <Link to="/" className="fw-bold text-decoration-none">
-                   Enroll in a course
-                </Link>
+                <small>
+                Need access? Contact the Main Administrator to create your teacher account.
+                </small>
+    
               </p>
             </div>
 
@@ -185,4 +188,4 @@ const StudentLoginPage = () => {
   );
 };
 
-export default StudentLoginPage;
+export default TeacherLoginPage;

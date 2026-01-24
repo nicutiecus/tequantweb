@@ -22,6 +22,7 @@ import CreateBlog from './blog/createBlog';
 import BlogDetail from './blog/blogDetail';
 import CourseStudy from './pages/courseStudy';
 import StudentRegister from './Student/studentRegister';
+import TeacherLoginPage from './Teacher/teacherLogin';
 
 function Main() {
   return (
@@ -40,6 +41,7 @@ function Main() {
       <Route path ="/about" element= {<AboutPage/>}/>
       <Route path ="/marketing-software-dev" element= {<SoftwareDevLanding/>}/>
       <Route path = "/enrollment" element= {<EnrollmentPage/>}/>
+      <Route path ="/teacher-login" element= {<TeacherLoginPage/>}/>
       <Route path ="/teacher-dashboard" element= {<TeacherDashboard/>}/>
       <Route path ="/edit-course-details" element= {<EditCourseDetails/>}/>
       <Route path ="/student-login" element= {<StudentLoginPage/>}/>

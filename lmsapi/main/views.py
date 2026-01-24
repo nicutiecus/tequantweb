@@ -210,7 +210,6 @@ class VerifyPaymentView(APIView):
                 return Response({'error': 'Payment verification failed'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            print(f"❌ SERVER ERROR: {str(e)}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
@@ -261,7 +260,18 @@ class StudentRegistrationView(APIView):
             password=hashed_password, 
             interested_categories='General'
         )
-        return Response({'message': 'Profile created successfully'}, status=status.HTTP_201_CREATED)
+
+        # 4. MAGIC STEP: Retroactive Linking
+            # Find any enrollments with this email that don't have a student ID yet
+        orphaned_enrollments = Enrollment.objects.filter(email= email, 
+                student__isnull=True
+            )
+            
+            # Update them all to point to this new student
+        Linked_count = orphaned_enrollments.update(student= student)
+
+        return Response({'message': 'Profile created successfully', 
+                         'linked_enrollments': Linked_count}, status=status.HTTP_201_CREATED)
 
 # lmsapi/views.py
 
@@ -336,8 +346,6 @@ class StaffStudentListView(generics.ListAPIView):
     def get_queryset(self):
         # specific staff_id passed in URL params ?staff_id=5
         staff_id = self.request.query_params.get('staff_id')
-        #debugging
-        print(f'The staff ID is{staff_id}')
         
         if not staff_id:
             return Student.objects.none()
@@ -351,9 +359,6 @@ class StaffStudentListView(generics.ListAPIView):
                 return Student.objects.none()
         except Staff.DoesNotExist:
             return Student.objects.none()
-
-# lmsapi/views.py
-
 
 
 

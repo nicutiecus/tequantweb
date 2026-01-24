@@ -62,7 +62,7 @@ export default function CourseDetailPage() {
         const [courseRes, moduleRes, teacherRes] = await Promise.all([
           axios.get(`http://127.0.0.1:8000/lmsapi/courses/${course_id}`),
           axios.get(`http://127.0.0.1:8000/lmsapi/course-module/${course_id}`),
-          axios.get(`http://127.0.0.1:8000/lmsapi/teacher`) // Fetching teachers from API
+          axios.get(`http://127.0.0.1:8000/lmsapi/teachers`) // Fetching teachers from API
         ]);
 
         setCourse(courseRes.data);

@@ -71,6 +71,13 @@ class Question(models.Model):
     option_d = models.CharField(max_length=200)
     correct_option = models.CharField(max_length=1, choices=[('A','A'), ('B','B'), ('C','C'), ('D','D')])
 
+class Student(models.Model):
+    full_name= models.CharField(max_length=200)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=200)
+    interested_categories = models.TextField()
+    profile_img = models.ImageField(upload_to='student_profiles', null=True, blank=True)
+
 
 class Enrollment(models.Model):
     # This ID will be used in the URL: /checkout/550e8400-e29b...
@@ -78,6 +85,7 @@ class Enrollment(models.Model):
     
     # Link to your existing Course model
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='enrolled_courses', null=True, blank=True)
     
     first_name = models.CharField(max_length=200)
     email = models.EmailField()
@@ -92,11 +100,7 @@ class Enrollment(models.Model):
 
 
 
-class Student(models.Model):
-    full_name= models.CharField(max_length=200)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=200)
-    interested_categories = models.TextField()
+
 
 
 class Staff(models.Model):

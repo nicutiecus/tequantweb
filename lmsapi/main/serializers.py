@@ -13,6 +13,7 @@ class StudentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id','full_name','email','password','interested_categories']
+        extra_kwargs = {'password': {'write_only':True}}
 
 
 
@@ -122,12 +123,7 @@ class EnrollmentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Enrollment
-        # We only map fields that ACTUALLY exist in your Enrollment model
-        fields = ['id', 'enrollment_id', 'course', 'first_name', 'email', 'is_paid', 'created_at']
-
-    # We REMOVED the 'create' method. 
-    # Django's default behavior is perfect here: it simply saves the Enrollment 
-    # to the database without trying to create linked Users or Students.
+        fields = ['id', 'enrollment_id', 'course', 'first_name','student', 'email', 'is_paid', 'created_at']
     
 
     # OUTPUT: Show Course Title in the response (for frontend display)

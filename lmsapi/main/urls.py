@@ -23,6 +23,7 @@ urlpatterns = [
     path('student/<int:pk>',views.StudentDetail.as_view()),
     path('student-register/', views.StudentRegistrationView.as_view()),
     path('student_login/',views.StudentLoginView.as_view()),
+    path('student/profile/<int:pk>/', views.StudentProfileView.as_view()),
     path('staff_login/',views.StaffLoginView.as_view()),
     path('staff/students/', views.StaffStudentListView.as_view()),
     path('courses/',views.CourseList.as_view()),

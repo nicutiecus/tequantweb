@@ -41,8 +41,9 @@ const StudentLoginPage = () => {
       .then(res => {
         if (res.data.bool === true) {
           // 1. Save email to LocalStorage (Required for Dashboard)
-          localStorage.setItem('studentEmail', res.data.email);
+          localStorage.setItem('studentLoginStatus', 'true');
           localStorage.setItem('studentId', res.data.student_id); // Optional: if needed later
+          localStorage.setItem('studentToken', res.data.token);
 
           // 2. Redirect to Dashboard
           navigate('/student-dashboard');

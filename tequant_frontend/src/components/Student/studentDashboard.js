@@ -25,14 +25,23 @@ const StudentDashboard = ({user }) => {
   const [courses, setCourses] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [studentData, setStudentData] = useState({
+    full_name: '',
+        email: '',
+        password: '',
+        interested_categories: '',
+        profile_img: null
+
+  })
   // 1. SECURITY FIX: Get email from Storage instead of URL
-  const studentEmail = localStorage.getItem('studentEmail') || user?.email;
+  const studentID = localStorage.getItem('studentId') || user?.id;
+  const studentEmail = localStorage.getItem('studentEmail' || user?.email);
 
 
 
   // 2. BACKEND CONNECTION: Fetch Real Courses
   useEffect(() => {
-    if (!studentEmail) {
+    if (!studentID) {
       alert("Please log in first.");
       navigate('/');
       return;
@@ -89,6 +98,36 @@ const StudentDashboard = ({user }) => {
     { id: 2, title: 'Market Analysis Report', course: 'Algorithmic Trading', due: 'Nov 05, 2023', status: 'Pending', type: 'Essay' },
     { id: 3, title: 'Python Syntax Quiz', course: 'Python for Data Science', due: 'Oct 15, 2023', status: 'Graded', score: '85%' },
   ];
+
+  const handleProfileUpdate = (e) => {
+        e.preventDefault();
+        
+        const uploadData = new FormData();
+        uploadData.append('full_name', studentData.full_name);
+        uploadData.append('interested_categories', studentData.interested_categories);
+        
+        // Only send password if the user actually typed something new
+        if (studentData.password) {
+            uploadData.append('password', studentData.password);
+        }
+        
+        // Only send image if it's a new file (not just the URL string)
+        if (studentData.profile_img instanceof File) {
+            uploadData.append('profile_img', studentData.profile_img);
+        }
+
+        axios.put(`http://127.0.0.1:8000/lmsapi/student/profile/${studentID}/`, uploadData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        .then(res => {
+            alert("Profile Updated Successfully!");
+            window.location.reload(); // Reload to clear password field & show new image
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Error updating profile");
+        });
+    };
 
   const handleLogout = () => {
     localStorage.removeItem('studentEmail');

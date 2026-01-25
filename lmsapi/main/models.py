@@ -77,6 +77,16 @@ class Student(models.Model):
     password = models.CharField(max_length=200)
     interested_categories = models.TextField()
     profile_img = models.ImageField(upload_to='student_profiles', null=True, blank=True)
+    # 👇 NEW: Store the login token here
+    login_token = models.CharField(max_length=100, blank=True, null=True)
+
+    # 👇 NEW: Required for Django permissions to work
+    @property
+    def is_authenticated(self):
+        return True
+    
+    def __str__(self):
+        return self.full_name
 
 
 class Enrollment(models.Model):

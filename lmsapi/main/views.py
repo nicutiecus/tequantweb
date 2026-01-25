@@ -5,14 +5,16 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets, status
 from .serializers import TeacherSerializer, StudentListSerializer, CourseSerializer, ModuleSerializer, TopicSerializer, EnrollmentSerializer
 from .models import Module, Topic, Course, Teacher, Student, Enrollment, Staff
-from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, AllowAny
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
+from rest_framework.parsers import MultiPartParser, FormParser
+import uuid
+from .authentication import StudentTokenAuthentication
 
 class TeacherList(generics.ListCreateAPIView):
     queryset = Teacher.objects.all()
@@ -273,7 +275,7 @@ class StudentRegistrationView(APIView):
         return Response({'message': 'Profile created successfully', 
                          'linked_enrollments': Linked_count}, status=status.HTTP_201_CREATED)
 
-# lmsapi/views.py
+
 
 class StudentLoginView(APIView):
     permission_classes = [AllowAny]
@@ -287,12 +289,18 @@ class StudentLoginView(APIView):
             student = Student.objects.get(email=email)
             
             # Verify Password 
-            if check_password(password, student.password): 
+            if check_password(password, student.password):
+                new_token = str(uuid.uuid4()) #generate new token
+                student.login_token= new_token
+                student.save() #save to DB
+
+
                 return Response({
                     'bool': True,
                     'student_id': student.id,
                     'email': student.email,
-                    'full_name': student.full_name
+                    'full_name': student.full_name,
+                    'token': new_token
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({
@@ -416,3 +424,32 @@ class TeacherStudentList(generics.ListAPIView):
         # Extract unique students from these enrollments
         student_ids = enrollments.values_list('student', flat=True).distinct()
         return Student.objects.filter(id__in=student_ids)
+
+
+
+
+class StudentProfileView(APIView):
+    authentication_classes = [StudentTokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated] # Restricts this to the logged-in user
+    parser_classes = [MultiPartParser, FormParser] # Required for Image Uploads
+
+    def get(self, request, pk):
+        if request.user.id != pk:
+            return Response({'msg': 'Unauthorized'}, status=403)
+
+        serializer = StudentListSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        if request.user.id != pk:
+             return Response({'msg': 'Unauthorized'}, status=403)
+
+        serializer = StudentListSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            if 'password' in request.data and request.data['password']:
+                hashed_pwd = make_password(request.data['password'])
+                serializer.save(password=hashed_pwd)
+            else:
+                serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { PenTool, LogOut, PlusCircle, Layout, Users, Image as ImageIcon } from 'lucide-react';
 
+const API_BASE = process.env.REACT_APP_API_URL
+
 const StaffDashboard = () => {
     const navigate = useNavigate();
     const [view, setView] = useState('blogs');
@@ -40,19 +42,19 @@ const StaffDashboard = () => {
 
     const fetchBlogs = () => {
         // Updated URL to point to the blog app
-        axios.get('http://127.0.0.1:8000/blogapi/posts/')
+        axios.get(`${API_BASE}/blogapi/posts/`)
             .then(res => setBlogs(res.data))
             .catch(err => console.log(err));
     };
 
     const fetchCategories = () => {
-        axios.get('http://127.0.0.1:8000/blogapi/categories/')
+        axios.get(`${API_BASE}/blogapi/categories/`)
             .then(res => setCategories(res.data))
             .catch(err => console.log(err));
     };
 
     const fetchStudents = () => {
-        axios.get(`http://127.0.0.1:8000/lmsapi/staff/students/?staff_id=${staffId}`)
+        axios.get(`${API_BASE}/lmsapi/staff/students/?staff_id=${staffId}`)
             .then(res => setStudents(res.data))
             .catch(err => console.log(err));
     };
@@ -84,7 +86,7 @@ const StaffDashboard = () => {
         }
 
         // 2. Post to Backend
-        axios.post('http://127.0.0.1:8000/blogapi/posts/', uploadData)
+        axios.post(`${API_BASE}/blogapi/posts/`, uploadData)
         .then(res => {
             alert("Blog Created Successfully!");
             setShowForm(false);

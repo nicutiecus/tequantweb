@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { PenTool, LogOut, PlusCircle, Layout, Users, Image as ImageIcon } from 'lucide-react';
 
-const API_BASE = process.env.REACT_APP_API_URL
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
 
 const StaffDashboard = () => {
     const navigate = useNavigate();

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar  ({ activePage, onNavigate})  {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-success shadow-sm fixed-top">

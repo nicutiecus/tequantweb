@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link} from 'react-router-dom';
 import axios from 'axios';
 import { 
   Mail, 
@@ -12,7 +12,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
- const API_BASE = process.env.REACT_APP_API_URL
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
 
 const StaffLoginPage = () => {
   const navigate = useNavigate();
@@ -135,7 +135,7 @@ const StaffLoginPage = () => {
               <div className="mb-4">
                 <div className="d-flex justify-content-between align-items-center mb-1">
                   <label className="form-label small fw-bold text-uppercase text-muted">Password</label>
-                  <a href="#" className="small text-primary text-decoration-none fw-bold">Forgot Password?</a>
+                  <Link to="" className="small text-primary text-decoration-none fw-bold">Forgot Password?</Link>
                 </div>
                 <div className="input-group">
                   <span className="input-group-text bg-light border-end-0 text-muted">

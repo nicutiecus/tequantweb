@@ -218,7 +218,9 @@ class VerifyPaymentView(APIView):
 
 class MyCoursesList(generics.ListAPIView):
     serializer_class = CourseSerializer
-    permission_classes = [AllowAny] # In a real app, use IsAuthenticated
+    authentication_classes = [StudentTokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    
 
     def get_queryset(self):
         student_email = self.kwargs['email']
@@ -323,14 +325,16 @@ class StaffLoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
 
-        #(debugging)
-        print(f"🔍 DEBUG: Trying to login with email: {email}")
+        
 
         try:
             staff = Staff.objects.get(email=email)
 
 
             if check_password(password, staff.password):
+                new_token = str(uuid.uuid4()) #generate new token
+                staff.login_token= new_token
+                staff.save() #save to DB
                 return Response({
                     'bool': True,
                     'staff_id': staff.id,
@@ -349,7 +353,8 @@ class StaffLoginView(APIView):
         
 class StaffStudentListView(generics.ListAPIView):
     serializer_class = StudentListSerializer
-    permission_classes = [AllowAny] # We manually check staff_id below
+    authentication_classes = [StudentTokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         # specific staff_id passed in URL params ?staff_id=5

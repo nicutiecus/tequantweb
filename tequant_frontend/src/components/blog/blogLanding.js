@@ -35,13 +35,26 @@ const BLOG_POSTS = [
 ];
 
 export default function BlogPage ()  {
+  const [Categories, setCategories] = useState();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOrder, setSortOrder] = useState('newest');
   const [searchQuery, setSearchQuery] = useState('');
+  const [blogPosts, setBlogPosts] = useState();
 
 
 
+  const fetchBlogs = () => {  
+        // Updated URL to point to the blog app
+        axios.get('http://127.0.0.1:8000/blogapi/posts/')
+            .then(res => setBlogPosts(res.data))
+            .catch(err => console.log(err));
+    };
 
+  const fetchCategories = () => {
+        axios.get('http://127.0.0.1:8000/blogapi/categories/')
+            .then(res => setCategories(res.data))
+            .catch(err => console.log(err));
+    }
 
   // Get unique categories
   const categories = useMemo(() => {

@@ -1,17 +1,18 @@
 import { Terminal, X, Menu } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar  ({ activePage, onNavigate})  {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate()
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-success shadow-sm fixed-top">
       <div className="container">
         <Link 
           className="navbar-brand fw-bold text-primary d-flex align-items-center" 
-          to="#"
-          onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
+          to="/"
+          //onClick={(e) => { e.preventDefault(); navigate('home'); }}
         >
           <Terminal className="me-2" size={28} />
           TE Quant

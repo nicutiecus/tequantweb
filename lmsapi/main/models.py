@@ -119,13 +119,17 @@ class Staff(models.Model):
     password = models.CharField(max_length=200)
     role = models.CharField(max_length=100, default='Editor')
     image = models.ImageField(upload_to='staff_imgs/', null=True)
-    
+    login_token = models.CharField(max_length=100, blank=True, null=True)
     # Access Controls
     can_create_blog = models.BooleanField(default=True)
     can_publish_blog = models.BooleanField(default=False) # Requires admin approval
     can_view_students = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def is_authenticated(self):
+        return True
 
     def __str__(self):
         return f"{self.full_name} ({self.role})"

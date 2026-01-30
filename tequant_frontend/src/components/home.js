@@ -6,6 +6,9 @@ import Partners from "./partners";
 import Testimonials from "./testimonials";
 import { useEffect } from "react";
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 export default function HomePage() {
 
     useEffect(()=>{

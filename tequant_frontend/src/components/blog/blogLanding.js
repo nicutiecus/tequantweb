@@ -5,6 +5,7 @@ import { Search, Mail} from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
 
 
 const BLOG_POSTS = [
@@ -45,13 +46,13 @@ export default function BlogPage ()  {
 
   const fetchBlogs = () => {  
         // Updated URL to point to the blog app
-        axios.get('http://127.0.0.1:8000/blogapi/posts/')
+        axios.get(`${API_BASE}/blogapi/posts/`)
             .then(res => setBlogPosts(res.data))
             .catch(err => console.log(err));
     };
 
   const fetchCategories = () => {
-        axios.get('http://127.0.0.1:8000/blogapi/categories/')
+        axios.get(`${API_BASE}/blogapi/categories/`)
             .then(res => setCategories(res.data))
             .catch(err => console.log(err));
     }

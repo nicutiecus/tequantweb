@@ -3,6 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import Sidebar from '../staff/sidebar';
 import axios from 'axios';
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const BlogDetail = () => {
     const { id } = useParams();
     const [post, setPost] = useState(null);
@@ -18,8 +21,8 @@ const BlogDetail = () => {
         try {
             // Parallel requests for efficiency
             const [postRes, commentRes] = await Promise.all([
-                axios.get(`http://127.0.0.1:8000/blog/posts/${id}/`, config),
-                axios.get(`http://127.0.0.1:8000/blog/comments/?post=${id}`, config)
+                axios.get(`${API_BASE}/blog/posts/${id}/`, config),
+                axios.get(`${API_BASE}/blog/comments/?post=${id}`, config)
             ]);
 
             setPost(postRes.data);
@@ -43,7 +46,7 @@ const BlogDetail = () => {
         try {
             // Axios POST: URL, Data, Config
             await axios.post(
-                'http://127.0.0.1:8000/api/comments/', 
+                'http://127.0.0.1:8000/blog/comments/', 
                 { post: id, content: newComment }, 
                 { headers: { Authorization: `Bearer ${token}` } }
             );

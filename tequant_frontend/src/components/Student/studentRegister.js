@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const StudentRegister = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,7 +38,7 @@ const StudentRegister = () => {
         }
 
         // Send split data to backend
-        axios.post('http://127.0.0.1:8000/lmsapi/student-register/', {
+        axios.post(`${API_BASE}/lmsapi/student-register/`, {
             email: formData.email,
             surname: formData.surname,
             first_name: formData.first_name,

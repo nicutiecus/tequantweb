@@ -19,6 +19,9 @@ import {
   Save
 } from 'lucide-react';
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const StudentDashboard = ({user }) => {
   const navigate=useNavigate();
   const [activeTab, setActiveTab] = useState('courses');
@@ -47,7 +50,7 @@ const StudentDashboard = ({user }) => {
       return;
     }
 
-    axios.get(`http://127.0.0.1:8000/lmsapi/my-courses/${studentEmail}/`)
+    axios.get(`${API_BASE}/lmsapi/my-courses/${studentEmail}/`)
       .then(res => {
         setCourses(res.data);
         setLoading(false);

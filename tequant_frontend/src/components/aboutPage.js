@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { Users, Lightbulb, Target, Rocket, Award, ArrowRight } from "lucide-react";
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const TUTORS = [
   {
     id: 1,

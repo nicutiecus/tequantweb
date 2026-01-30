@@ -12,6 +12,9 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const StudentLoginPage = () => {
   const navigate = useNavigate();
   
@@ -35,7 +38,7 @@ const StudentLoginPage = () => {
     e.preventDefault();
     setStatus({ loading: true, error: '' });
 
-    const loginUrl = 'http://127.0.0.1:8000/lmsapi/student_login/';
+    const loginUrl = `${API_BASE}/lmsapi/student_login/`;
 
     axios.post(loginUrl, formData)
       .then(res => {

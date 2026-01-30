@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { User, Mail, Phone, MapPin, CheckCircle, AlertCircle } from "lucide-react";
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 export default function NewEnrollmentPage() {
   
   const { course_id } = useParams();
@@ -21,7 +24,7 @@ export default function NewEnrollmentPage() {
 
   // Fetch course name to display on the form
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/lmsapi/courses/${course_id}`)
+    axios.get(`${API_BASE}/lmsapi/courses/${course_id}`)
       .then(res => setCourse(res.data))
       .catch(err => console.error(err));
   }, [course_id]);
@@ -37,7 +40,7 @@ export default function NewEnrollmentPage() {
 
     try {
       // 1. Send data to backend
-      const response = await axios.post('http://127.0.0.1:8000/lmsapi/enrollment/', {
+      const response = await axios.post(`${API_BASE}/lmsapi/enrollment/`, {
         course: course_id,
         ...formData
       });

@@ -53,11 +53,14 @@ export default function CoursesPage() {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All');
 
+  const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://127.0.0.1:8000/lmsapi/courses/');
+        const response = await axios.get(`${API_BASE}/lmsapi/courses/`);
         
         // DEBUG: Check your browser console to see exactly what Django sends
         console.log("API Response:", response.data);

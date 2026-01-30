@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const Checkout = () => {
     const { enrollment_id } = useParams();
     const navigate = useNavigate();
@@ -10,7 +13,7 @@ const Checkout = () => {
 
     // 1. Fetch Enrollment Details
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/lmsapi/checkout-info/${enrollment_id}/`)
+        axios.get(`${API_BASE}/lmsapi/checkout-info/${enrollment_id}/`)
             .then(res => {
                 setEnrollment(res.data);
                 setLoading(false);

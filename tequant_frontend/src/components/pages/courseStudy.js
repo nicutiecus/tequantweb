@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const CourseStudy = () => {
     const { course_id } = useParams();
     const navigate = useNavigate();
@@ -19,7 +22,7 @@ const CourseStudy = () => {
             return;
         }
 
-        axios.get(`http://127.0.0.1:8000/lmsapi/check-enrollment/${course_id}/${studentEmail}/`)
+        axios.get(`${API_BASE}/lmsapi/check-enrollment/${course_id}/${studentEmail}/`)
             .then(res => {
                 setPermission(true);
                 fetchCourseContent();
@@ -30,7 +33,7 @@ const CourseStudy = () => {
     }, [course_id, studentEmail, navigate]);
 
     const fetchCourseContent = () => {
-        axios.get(`http://127.0.0.1:8000/lmsapi/course-modules/${course_id}/`)
+        axios.get(`${API_BASE}/lmsapi/course-modules/${course_id}/`)
             .then(res => {
                 setModules(res.data);
             })

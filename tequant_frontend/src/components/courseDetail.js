@@ -5,6 +5,9 @@ import { useParams, Link as RouterLink, useNavigate } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
 import axios from "axios";
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
+
 const ModuleAccordion = ({ module }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -60,9 +63,9 @@ export default function CourseDetailPage() {
         setLoading(true);
         // Fetch Course, Modules, and Teachers in parallel
         const [courseRes, moduleRes, teacherRes] = await Promise.all([
-          axios.get(`http://127.0.0.1:8000/lmsapi/courses/${course_id}`),
-          axios.get(`http://127.0.0.1:8000/lmsapi/course-module/${course_id}`),
-          axios.get(`http://127.0.0.1:8000/lmsapi/teachers`) // Fetching teachers from API
+          axios.get(`${API_BASE}/lmsapi/courses/${course_id}`),
+          axios.get(`${API_BASE}/lmsapi/course-module/${course_id}`),
+          axios.get(`${API_BASE}/lmsapi/teachers`) // Fetching teachers from API
         ]);
 
         setCourse(courseRes.data);

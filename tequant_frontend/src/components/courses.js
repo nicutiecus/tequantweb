@@ -3,6 +3,8 @@ import { Zap, Star } from "lucide-react";
 import { Link } from "react-router-dom"; // Ensure this is imported
 import axios from "axios";
 
+const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
+
 const CourseCard = ({ course }) => {
   // Fallback: Check for 'id', 'pk', or 'course_id' to ensure we have a valid link
   // This prevents the "undefined" URL error
@@ -53,7 +55,6 @@ export default function CoursesPage() {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const API_BASE = (typeof process !== 'undefined' && process.env.REACT_APP_API_URL) || 'http://localhost:8000'
 
 
   useEffect(() => {
